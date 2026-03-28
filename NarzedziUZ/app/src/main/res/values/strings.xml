@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NarzedziUZ</string>
+
+    <!-- Auth -->
+    <string name="login_title">Logowanie</string>
+    <string name="register_title">Rejestracja</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">Hasło</string>
+    <string name="confirm_password_hint">Potwierdź hasło</string>
+    <string name="first_name_hint">Imię</string>
+    <string name="last_name_hint">Nazwisko</string>
+    <string name="login_btn">Zaloguj się</string>
+    <string name="register_btn">Zarejestruj się</string>
+    <string name="go_to_register">Utwórz nowe konto</string>
+    <string name="go_to_login">Masz już konto? Zaloguj się</string>
+
+    <!-- Main -->
+    <string name="search_hint">Szukaj produktów…</string>
+    <string name="all_categories">Wszystkie kategorie</string>
+    <string name="no_products">Brak produktów</string>
+    <string name="in_stock">Na stanie: %d szt.</string>
+    <string name="in_stock_simple">Na stanie</string>
+    <string name="out_of_stock">Brak w magazynie</string>
+    <string name="login_required">Zaloguj się</string>
+
+    <!-- Product detail -->
+    <string name="manufacturer_label">Producent: %s</string>
+    <string name="add_to_cart">Dodaj do koszyka</string>
+    <string name="add_to_wishlist">Dodaj do listy życzeń</string>
+    <string name="in_wishlist">Na liście życzeń ✓</string>
+    <string name="added_to_cart">Dodano do koszyka!</string>
+    <string name="add_review_btn">Dodaj opinię</string>
+    <string name="add_review">Dodaj opinię</string>
+    <string name="edit_review">Edytuj opinię</string>
+    <string name="delete_review">Usuń opinię</string>
+    <string name="review_count">%d opinii</string>
+    <string name="no_reviews_yet">Brak opinii</string>
+    <string name="submit">Wyślij</string>
+    <string name="update">Aktualizuj</string>
+    <string name="cancel">Anuluj</string>
+    <string name="comment_hint">Napisz komentarz…</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Koszyk</string>
+    <string name="cart_empty">Twój koszyk jest pusty</string>
+    <string name="quantity_label">Ilość: %d</string>
+    <string name="discount_code_hint">Kod rabatowy</string>
+    <string name="apply_discount">Zastosuj</string>
+    <string name="discount_applied">Kod %s: -%d%%</string>
+    <string name="invalid_discount">Nieprawidłowy kod rabatowy</string>
+    <string name="proceed_checkout">Przejdź do kasy</string>
+
+    <!-- Checkout -->
+    <string name="checkout_title">Finalizacja zamówienia</string>
+    <string name="street_hint">Ulica</string>
+    <string name="house_hint">Nr domu / lokalu</string>
+    <string name="city_hint">Miasto</string>
+    <string name="zip_hint">Kod pocztowy</string>
+    <string name="country_hint">Kraj</string>
+    <string name="payment_method">Metoda płatności</string>
+    <string name="blik_code_hint">Kod BLIK (6 cyfr)</string>
+    <string name="card_number_hint">Numer karty (16 cyfr)</string>
+    <string name="card_expiry_hint">MM/RR</string>
+    <string name="card_cvc_hint">CVC</string>
+    <string name="place_order">Złóż zamówienie</string>
+
+    <!-- Order summary -->
+    <string name="order_summary_title">Podsumowanie zamówienia</string>
+    <string name="thank_you">Dziękujemy za zakupy!</string>
+    <string name="order_number">Zamówienie #%s</string>
+    <string name="go_to_home">Wróć do sklepu</string>
+    <string name="go_to_profile">Mój profil</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Mój profil</string>
+    <string name="my_orders">Moje zamówienia</string>
+    <string name="go_to_wishlist">Lista życzeń</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="no_orders">Brak zamówień</string>
+    <string name="purchases_label">ZAKUPY</string>
+    <string name="spent_label">WYDANO</string>
+
+    <!-- Wishlist -->
+    <string name="wishlist_title">Lista życzeń</string>
+    <string name="wishlist_empty">Twoja lista życzeń jest pusta</string>
+
+    <!-- Menu -->
+    <string name="action_cart">Koszyk</string>
+    <string name="action_profile">Profil</string>
+    <string name="action_wishlist">Lista życzeń</string>
+    <string name="action_logout">Wyloguj</string>
+</resources>

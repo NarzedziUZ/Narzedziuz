@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_review.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_review.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_cart.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_cart.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_order_summary.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_order_summary.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_cart.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_cart.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_wishlist.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_wishlist.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_login.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_login.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_register.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_register.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_product.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_product.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_profile.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_main.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_main.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_product_detail.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_product_detail.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_order_line.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_order_line.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_order.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_order.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/item_wishlist.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/item_wishlist.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/activity_checkout.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/activity_checkout.xml"
+    },
+    {
+        "merged": "org.store.narzedziuz.app-mergeDebugResources-39:/layout/dialog_review.xml",
+        "source": "org.store.narzedziuz.app-main-42:/layout/dialog_review.xml"
+    }
+]

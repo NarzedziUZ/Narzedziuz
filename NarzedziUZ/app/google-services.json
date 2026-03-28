@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134709535936",
+    "project_id": "narzedziuz-da903",
+    "storage_bucket": "narzedziuz-da903.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134709535936:android:cd8575343f2d172fd73925",
+        "android_client_info": {
+          "package_name": "org.store.narzedziuz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtRWyzjzqfGYh7xrG8oTFLdJJjTZ2CPK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

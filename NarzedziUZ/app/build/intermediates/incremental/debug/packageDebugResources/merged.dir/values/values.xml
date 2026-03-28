@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#FF6F00</color>
+    <color name="background">#F5F5F5</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="green">#2E7D32</color>
+    <color name="orange">#E65100</color>
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#E3F2FD</color>
+    <color name="red">#C62828</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_hint">#BDBDBD</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="white">#FFFFFF</color>
+    <plurals name="item_count">
+        <item quantity="one">%d produkt</item>
+        <item quantity="few">%d produkty</item>
+        <item quantity="other">%d produktów</item>
+    </plurals>
+    <string name="action_cart">Koszyk</string>
+    <string name="action_logout">Wyloguj</string>
+    <string name="action_profile">Profil</string>
+    <string name="action_wishlist">Lista życzeń</string>
+    <string name="add_review">Dodaj opinię</string>
+    <string name="add_review_btn">Dodaj opinię</string>
+    <string name="add_to_cart">Dodaj do koszyka</string>
+    <string name="add_to_wishlist">Dodaj do listy życzeń</string>
+    <string name="added_to_cart">Dodano do koszyka!</string>
+    <string name="all_categories">Wszystkie kategorie</string>
+    <string name="app_name">NarzedziUZ</string>
+    <string name="apply_discount">Zastosuj</string>
+    <string name="blik_code_hint">Kod BLIK (6 cyfr)</string>
+    <string name="cancel">Anuluj</string>
+    <string name="card_cvc_hint">CVC</string>
+    <string name="card_expiry_hint">MM/RR</string>
+    <string name="card_number_hint">Numer karty (16 cyfr)</string>
+    <string name="cart_empty">Twój koszyk jest pusty</string>
+    <string name="cart_title">Koszyk</string>
+    <string name="checkout_title">Finalizacja zamówienia</string>
+    <string name="city_hint">Miasto</string>
+    <string name="comment_hint">Napisz komentarz…</string>
+    <string name="confirm_password_hint">Potwierdź hasło</string>
+    <string name="country_hint">Kraj</string>
+    <string name="delete_review">Usuń opinię</string>
+    <string name="discount_applied">Kod %s: -%d%%</string>
+    <string name="discount_code_hint">Kod rabatowy</string>
+    <string name="edit_review">Edytuj opinię</string>
+    <string name="email_hint">E-mail</string>
+    <string name="first_name_hint">Imię</string>
+    <string name="gcm_defaultSenderId" translatable="false">134709535936</string>
+    <string name="go_to_home">Wróć do sklepu</string>
+    <string name="go_to_login">Masz już konto? Zaloguj się</string>
+    <string name="go_to_profile">Mój profil</string>
+    <string name="go_to_register">Utwórz nowe konto</string>
+    <string name="go_to_wishlist">Lista życzeń</string>
+    <string name="google_api_key" translatable="false">AIzaSyCtRWyzjzqfGYh7xrG8oTFLdJJjTZ2CPK4</string>
+    <string name="google_app_id" translatable="false">1:134709535936:android:cd8575343f2d172fd73925</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCtRWyzjzqfGYh7xrG8oTFLdJJjTZ2CPK4</string>
+    <string name="google_storage_bucket" translatable="false">narzedziuz-da903.firebasestorage.app</string>
+    <string name="house_hint">Nr domu / lokalu</string>
+    <string name="in_stock">Na stanie: %d szt.</string>
+    <string name="in_stock_simple">Na stanie</string>
+    <string name="in_wishlist">Na liście życzeń ✓</string>
+    <string name="invalid_discount">Nieprawidłowy kod rabatowy</string>
+    <string name="last_name_hint">Nazwisko</string>
+    <string name="login_btn">Zaloguj się</string>
+    <string name="login_required">Zaloguj się</string>
+    <string name="login_title">Logowanie</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="manufacturer_label">Producent: %s</string>
+    <string name="my_orders">Moje zamówienia</string>
+    <string name="no_orders">Brak zamówień</string>
+    <string name="no_products">Brak produktów</string>
+    <string name="no_reviews_yet">Brak opinii</string>
+    <string name="order_number">Zamówienie #%s</string>
+    <string name="order_summary_title">Podsumowanie zamówienia</string>
+    <string name="out_of_stock">Brak w magazynie</string>
+    <string name="password_hint">Hasło</string>
+    <string name="payment_method">Metoda płatności</string>
+    <string name="place_order">Złóż zamówienie</string>
+    <string name="proceed_checkout">Przejdź do kasy</string>
+    <string name="profile_title">Mój profil</string>
+    <string name="project_id" translatable="false">narzedziuz-da903</string>
+    <string name="purchases_label">ZAKUPY</string>
+    <string name="quantity_label">Ilość: %d</string>
+    <string name="register_btn">Zarejestruj się</string>
+    <string name="register_title">Rejestracja</string>
+    <string name="review_count">%d opinii</string>
+    <string name="search_hint">Szukaj produktów…</string>
+    <string name="spent_label">WYDANO</string>
+    <string name="street_hint">Ulica</string>
+    <string name="submit">Wyślij</string>
+    <string name="thank_you">Dziękujemy za zakupy!</string>
+    <string name="update">Aktualizuj</string>
+    <string name="wishlist_empty">Twoja lista życzeń jest pusta</string>
+    <string name="wishlist_title">Lista życzeń</string>
+    <string name="zip_hint">Kod pocztowy</string>
+    <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+    <style name="Theme.NarzedziUZ" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+    <style name="Theme.NarzedziUZ.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Theme.NarzedziUZ.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/primary</item>
+    </style>
+    <style name="Theme.NarzedziUZ.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="?attr/actionBarSize" android:background="@color/primary" app:theme="@style/Theme.NarzedziUZ.AppBarOverlay" app:popupTheme="@style/Theme.NarzedziUZ.PopupOverlay"/>
+
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+
+            <!-- Adres -->
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Adres dostawy" android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/street_hint" android:layout_marginBottom="10dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_street" android:layout_width="match_parent" android:layout_height="wrap_content"/></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/house_hint" android:layout_marginBottom="10dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_house_number" android:layout_width="match_parent" android:layout_height="wrap_content"/></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/city_hint" android:layout_marginBottom="10dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_city" android:layout_width="match_parent" android:layout_height="wrap_content"/></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/zip_hint" android:layout_marginBottom="10dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_zip_code" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number"/></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/country_hint" android:layout_marginBottom="16dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_country" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Polska"/></com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Płatność -->
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/payment_method" android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <RadioGroup android:id="@+id/rg_payment" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                <RadioButton android:id="@+id/rb_blik" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="BLIK" android:textSize="15sp" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rb_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Karta płatnicza" android:textSize="15sp" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rb_transfer" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Przelew tradycyjny" android:textSize="15sp" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rb_paypal" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="PayPal" android:textSize="15sp" android:padding="8dp"/>
+            </RadioGroup>
+
+            <LinearLayout android:id="@+id/layout_blik" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/blik_code_hint"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_blik_code" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="6"/></com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/layout_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/card_number_hint" android:layout_marginBottom="8dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_card_number" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="16"/></com.google.android.material.textfield.TextInputLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="@string/card_expiry_hint" android:layout_marginEnd="8dp"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_card_expiry" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"/></com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="@string/card_cvc_hint"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et_card_cvc" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberPassword" android:maxLength="3"/></com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@color/surface" android:padding="16dp" android:elevation="8dp">
+        <TextView android:id="@+id/tv_total" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/primary" android:textSize="18sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+        <ProgressBar android:id="@+id/progress_bar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:visibility="gone" android:layout_marginBottom="8dp"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_place_order" android:layout_width="match_parent" android:layout_height="52dp" android:text="@string/place_order" android:textSize="16sp"/>
+    </LinearLayout>
+</LinearLayout>
