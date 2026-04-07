@@ -14,4 +14,7 @@
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout"
         app:showAsAction="never" />
+    <item android:id="@+id/action_discount_draw"
+        android:title="@string/action_discount_draw"
+        app:showAsAction="never" />
 </menu>

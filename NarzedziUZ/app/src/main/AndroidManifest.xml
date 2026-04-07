@@ -65,6 +65,11 @@
             android:name=".activities.WishlistActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.AccelerometerActivity"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>

@@ -90,4 +90,9 @@
     <string name="action_profile">Profil</string>
     <string name="action_wishlist">Lista życzeń</string>
     <string name="action_logout">Wyloguj</string>
+    <string name="action_discount_draw">ShakeUZ</string>
+
+    <!-- Dicount Draw -->
+    <string name="discount_draw_title">ShakeUZ</string>
+
 </resources>
