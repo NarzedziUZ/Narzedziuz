@@ -64,6 +64,14 @@
                     <com.google.android.material.textfield.TextInputEditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPassword" android:imeOptions="actionDone"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- reCAPTCHA -->
+                <include
+                    layout="@layout/widget_captcha"
+                    android:id="@+id/captcha_widget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"/>
+
                 <ProgressBar android:id="@+id/progress_bar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:visibility="gone" android:layout_marginBottom="8dp"/>
 
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_register" android:layout_width="match_parent" android:layout_height="56dp" android:text="@string/register_btn" android:textSize="16sp" android:layout_marginBottom="12dp"/>
