@@ -89,10 +89,15 @@
     <string name="action_cart">Koszyk</string>
     <string name="action_profile">Profil</string>
     <string name="action_wishlist">Lista życzeń</string>
-    <string name="action_logout">Wyloguj</string>
+    <string name="action_logout">Wyloguj się</string>
     <string name="action_discount_draw">ShakeUZ</string>
 
-    <!-- Dicount Draw -->
-    <string name="discount_draw_title">ShakeUZ</string>
+    <!-- ShakeUZ / Accelerometer -->
+    <string name="shakeuz_title">ShakeUZ</string>
+    <string name="shakeuz_under_title">Potrząśnij aby zdobyć promocję</string>
+    <string name="shakeuz_toolbar_title">ShakeUZ</string>
+    <string name="shakeuz_no_accelerometer">Brak akcelerometru w urządzeniu</string>
+    <string name="shakeuz_shake_detected">Wykryto potrząśnięcie</string>
+    <string name="shakeuz_promotion_won">Twoja promocja!!!</string>
 
 </resources>

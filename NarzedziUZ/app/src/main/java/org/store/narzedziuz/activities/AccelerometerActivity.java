@@ -1,5 +1,6 @@
 package org.store.narzedziuz.activities;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,7 +9,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +23,17 @@ import org.store.narzedziuz.R;
 
 public class AccelerometerActivity extends AppCompatActivity implements SensorEventListener {
 
-    private TextView textView;
+    private ImageView shakeImage;
+    private ProgressBar shakeBar;
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private int progres;
+    private float lastAcceleration = SensorManager.GRAVITY_EARTH;
+    private float currentAcceleration = SensorManager.GRAVITY_EARTH;
+    private float filteredAcceleration = 0.0f;
+    private long lastShakeTime = 0L;
+
+    private static final long SHAKE_COOLDOWN_MS = 500;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,14 +41,15 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         setContentView(R.layout.activity_discount_draw);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        textView = findViewById(R.id.textView);
+        shakeImage = findViewById(R.id.shakeImage);
+        shakeBar = findViewById(R.id.shakeBar);
 
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Akcelerometr");
+            getSupportActionBar().setTitle(getString(R.string.shakeuz_toolbar_title));
         }
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -45,7 +59,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         }
 
         if (accelerometer == null) {
-            textView.setText("Brak akcelerometru w urządzeniu");
+            Toast.makeText(this, R.string.shakeuz_no_accelerometer, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -68,12 +82,36 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     @SuppressLint("SetTextI18n")
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
 
-            textView.setText("x = " + x + "\ny = " + y + "\nz = " + z);
+            lastAcceleration = currentAcceleration;
+            currentAcceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+            float delta = Math.abs(currentAcceleration - lastAcceleration);
+            filteredAcceleration = 0.8f * filteredAcceleration + 0.2f * delta;
+
+            long now = System.currentTimeMillis();
+            if (filteredAcceleration > 3.0f && now - lastShakeTime > SHAKE_COOLDOWN_MS) {
+                lastShakeTime = now;
+                shakeImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_animation));
+                updateProgressAfterShake();
+            }
+        }
+    }
+    private void updateProgressAfterShake() {
+        progres += 20;
+        if (progres > 100) {
+            progres = 100;
+        }
+
+        shakeBar.setProgress(progres);
+
+        if (progres == 100) {
+            Toast.makeText(this, R.string.shakeuz_promotion_won, Toast.LENGTH_SHORT).show();
         }
     }
 
