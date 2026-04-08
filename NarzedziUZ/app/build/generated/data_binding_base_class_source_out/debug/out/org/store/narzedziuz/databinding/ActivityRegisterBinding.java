@@ -26,6 +26,9 @@ public final class ActivityRegisterBinding implements ViewBinding {
   public final MaterialButton btnRegister;
 
   @NonNull
+  public final WidgetCaptchaBinding captchaWidget;
+
+  @NonNull
   public final TextInputEditText etConfirmPassword;
 
   @NonNull
@@ -47,12 +50,13 @@ public final class ActivityRegisterBinding implements ViewBinding {
   public final TextView tvLogin;
 
   private ActivityRegisterBinding(@NonNull ScrollView rootView, @NonNull MaterialButton btnRegister,
-      @NonNull TextInputEditText etConfirmPassword, @NonNull TextInputEditText etEmail,
-      @NonNull TextInputEditText etFirstName, @NonNull TextInputEditText etLastName,
-      @NonNull TextInputEditText etPassword, @NonNull ProgressBar progressBar,
-      @NonNull TextView tvLogin) {
+      @NonNull WidgetCaptchaBinding captchaWidget, @NonNull TextInputEditText etConfirmPassword,
+      @NonNull TextInputEditText etEmail, @NonNull TextInputEditText etFirstName,
+      @NonNull TextInputEditText etLastName, @NonNull TextInputEditText etPassword,
+      @NonNull ProgressBar progressBar, @NonNull TextView tvLogin) {
     this.rootView = rootView;
     this.btnRegister = btnRegister;
+    this.captchaWidget = captchaWidget;
     this.etConfirmPassword = etConfirmPassword;
     this.etEmail = etEmail;
     this.etFirstName = etFirstName;
@@ -94,6 +98,13 @@ public final class ActivityRegisterBinding implements ViewBinding {
       if (btnRegister == null) {
         break missingId;
       }
+
+      id = R.id.captcha_widget;
+      View captchaWidget = ViewBindings.findChildViewById(rootView, id);
+      if (captchaWidget == null) {
+        break missingId;
+      }
+      WidgetCaptchaBinding binding_captchaWidget = WidgetCaptchaBinding.bind(captchaWidget);
 
       id = R.id.et_confirm_password;
       TextInputEditText etConfirmPassword = ViewBindings.findChildViewById(rootView, id);
@@ -137,8 +148,8 @@ public final class ActivityRegisterBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityRegisterBinding((ScrollView) rootView, btnRegister, etConfirmPassword,
-          etEmail, etFirstName, etLastName, etPassword, progressBar, tvLogin);
+      return new ActivityRegisterBinding((ScrollView) rootView, btnRegister, binding_captchaWidget,
+          etConfirmPassword, etEmail, etFirstName, etLastName, etPassword, progressBar, tvLogin);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
