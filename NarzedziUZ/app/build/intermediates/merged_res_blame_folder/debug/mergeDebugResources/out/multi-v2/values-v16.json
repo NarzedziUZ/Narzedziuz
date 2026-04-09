@@ -4,7 +4,7 @@
             "outputFile": "org.store.narzedziuz.app-mergeDebugResources-38:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/home/user/.gradle/caches/9.3.1/transforms/7b518a24f2bb38ded9ca24da0bcd3340/transformed/appcompat-1.6.1/res/values-v16/values-v16.xml",
+                    "source": "C:\\Users\\Szymon\\.gradle\\caches\\9.3.1\\transforms\\7b518a24f2bb38ded9ca24da0bcd3340\\workspace\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/home/user/.gradle/caches/9.3.1/transforms/89a77d1151612ef3724df299a79fac80/transformed/core-1.12.0/res/values-v16/values-v16.xml",
+                    "source": "C:\\Users\\Szymon\\.gradle\\caches\\9.3.1\\transforms\\89a77d1151612ef3724df299a79fac80\\workspace\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

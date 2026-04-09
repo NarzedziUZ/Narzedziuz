@@ -150,7 +150,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        CartRepository.getInstance().addToCart(user.getUid(), product.getId(), 1, product.getPrice(),
+        CartRepository.getInstance().addToCart(this,user.getUid(), product.getId(), 1, product.getPrice(),
                 new OnComplete() {
                     @Override public void onSuccess() {
                         Toast.makeText(ProductDetailActivity.this, getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();

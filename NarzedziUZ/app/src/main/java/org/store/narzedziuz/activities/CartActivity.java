@@ -87,6 +87,8 @@ public class CartActivity extends AppCompatActivity {
         loadCart();
     }
 
+
+
     private void loadCart() {
         if (userId == null) { tvEmpty.setVisibility(View.VISIBLE); layoutSummary.setVisibility(View.GONE); return; }
         progressBar.setVisibility(View.VISIBLE);
@@ -103,6 +105,7 @@ public class CartActivity extends AppCompatActivity {
                     layoutSummary.setVisibility(View.VISIBLE);
                     updateSummary(items);
                 }
+                org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(CartActivity.this);
             }
             @Override
             public void onFailure(Exception e) {
@@ -149,7 +152,8 @@ public class CartActivity extends AppCompatActivity {
     private void removeItem(CartItem item) {
         if (userId == null) return;
         CartRepository.getInstance().removeFromCart(userId, item.getId(), new OnComplete() {
-            @Override public void onSuccess() { loadCart(); }
+            @Override public void onSuccess() { loadCart();
+                org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(CartActivity.this);}
             @Override public void onFailure(Exception e) {
                 Toast.makeText(CartActivity.this, "Błąd usuwania", Toast.LENGTH_SHORT).show();
             }
