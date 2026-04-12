@@ -15,11 +15,12 @@ color text_primary
 color text_secondary
 color white
 drawable bg_avatar
+drawable bg_captcha
+drawable bg_captcha_checkbox
 drawable bg_card_rounded
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable ic_product_placeholder
-drawable widget_bg
 id action_cart
 id action_logout
 id action_profile
@@ -36,6 +37,10 @@ id btn_place_order
 id btn_register
 id btn_remove
 id btn_wishlist
+id captcha_checkbox
+id captcha_frame
+id captcha_progress
+id captcha_widget
 id et_blik_code
 id et_card_cvc
 id et_card_expiry
@@ -105,7 +110,6 @@ id tv_subtotal
 id tv_total
 id tv_total_spent
 id tv_user_name
-id widgetText
 layout activity_cart
 layout activity_checkout
 layout activity_login
@@ -122,7 +126,7 @@ layout item_order_line
 layout item_product
 layout item_review
 layout item_wishlist
-layout widget_cart
+layout widget_captcha
 menu main_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
@@ -210,4 +214,3 @@ style Theme.NarzedziUZ
 style Theme.NarzedziUZ.AppBarOverlay
 style Theme.NarzedziUZ.NoActionBar
 style Theme.NarzedziUZ.PopupOverlay
-xml cart_widget_info
