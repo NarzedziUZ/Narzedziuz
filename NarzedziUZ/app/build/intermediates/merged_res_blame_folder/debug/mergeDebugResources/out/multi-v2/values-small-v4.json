@@ -4,7 +4,7 @@
             "outputFile": "org.store.narzedziuz.app-mergeDebugResources-38:/values-small-v4/values-small-v4.xml",
             "map": [
                 {
-                    "source": "/home/user/.gradle/caches/9.3.1/transforms/7a469693f1ac3f3336ec2aecb0821c72/transformed/material-1.11.0/res/values-small-v4/values-small-v4.xml",
+                    "source": "C:\\Users\\Szymon\\.gradle\\caches\\9.3.1\\transforms\\7a469693f1ac3f3336ec2aecb0821c72\\workspace\\transformed\\material-1.11.0\\res\\values-small-v4\\values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

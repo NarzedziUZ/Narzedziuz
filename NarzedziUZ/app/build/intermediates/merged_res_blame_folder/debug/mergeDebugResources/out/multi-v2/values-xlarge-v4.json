@@ -4,7 +4,7 @@
             "outputFile": "org.store.narzedziuz.app-mergeDebugResources-38:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "/home/user/.gradle/caches/9.3.1/transforms/7b518a24f2bb38ded9ca24da0bcd3340/transformed/appcompat-1.6.1/res/values-xlarge-v4/values-xlarge-v4.xml",
+                    "source": "C:\\Users\\Szymon\\.gradle\\caches\\9.3.1\\transforms\\7b518a24f2bb38ded9ca24da0bcd3340\\workspace\\transformed\\appcompat-1.6.1\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

@@ -4,7 +4,7 @@
             "outputFile": "org.store.narzedziuz.app-mergeDebugResources-38:/values-v17/values-v17.xml",
             "map": [
                 {
-                    "source": "/home/user/.gradle/caches/9.3.1/transforms/7b518a24f2bb38ded9ca24da0bcd3340/transformed/appcompat-1.6.1/res/values-v17/values-v17.xml",
+                    "source": "C:\\Users\\Szymon\\.gradle\\caches\\9.3.1\\transforms\\7b518a24f2bb38ded9ca24da0bcd3340\\workspace\\transformed\\appcompat-1.6.1\\res\\values-v17\\values-v17.xml",
                     "from": {
                         "startLines": "2,5,9,12,15,18,22,25,29,33,37,40,43,46,50,53,57",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
