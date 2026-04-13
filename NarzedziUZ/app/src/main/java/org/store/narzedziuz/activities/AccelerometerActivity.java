@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.store.narzedziuz.R;
 
@@ -32,6 +34,8 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     private float currentAcceleration = SensorManager.GRAVITY_EARTH;
     private float filteredAcceleration = 0.0f;
     private long lastShakeTime = 0L;
+    private ConstraintLayout layoutBefore;
+    private ConstraintLayout layoutAfter;
 
     private static final long SHAKE_COOLDOWN_MS = 500;
 
@@ -46,10 +50,14 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         setSupportActionBar(toolbar);
 
+
+        layoutBefore = findViewById(R.id.layoutBeforeShake);
+        layoutAfter = findViewById(R.id.layoutAfterShake);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.shakeuz_toolbar_title));
+            getSupportActionBar().setTitle(null);
         }
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -112,6 +120,9 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         if (progres == 100) {
             Toast.makeText(this, R.string.shakeuz_promotion_won, Toast.LENGTH_SHORT).show();
+
+            layoutBefore.setVisibility(View.GONE);
+            layoutAfter.setVisibility(View.VISIBLE);
         }
     }
 
