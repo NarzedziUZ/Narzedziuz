@@ -24,11 +24,13 @@ import org.store.narzedziuz.callbacks.OnComplete;
 import org.store.narzedziuz.models.CartItem;
 import org.store.narzedziuz.models.DiscountCode;
 import org.store.narzedziuz.repositories.CartRepository;
+import org.store.narzedziuz.repositories.DiscountCodeRepository;
 import org.store.narzedziuz.utils.DiscountCodeHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import org.store.narzedziuz.callbacks.OnDiscountCodeLoaded;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -79,6 +81,18 @@ public class CartActivity extends AppCompatActivity {
         btnCheckout.setOnClickListener(v -> proceedToCheckout());
 
         loadCart();
+        android.content.SharedPreferences prefs = getSharedPreferences("ShakePromotionPrefs", MODE_PRIVATE);
+        String savedDate = prefs.getString("promo_date", "");
+        String todayDate = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+
+        if (savedDate.equals(todayDate)) {
+            String savedCode = prefs.getString("promo_code", "");
+            if (!savedCode.isEmpty()) {
+                // Wpisz automatycznie wygrany kod do pola tekstowego
+                etDiscountCode.setText(savedCode);
+                Toast.makeText(this, "Przypominamy o Twojej dzisiejszej wygranej!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -135,15 +149,49 @@ public class CartActivity extends AppCompatActivity {
 
     private void applyDiscountCode() {
         String code = etDiscountCode.getText().toString().trim();
-        if (TextUtils.isEmpty(code)) { Toast.makeText(this, "Podaj kod rabatowy", Toast.LENGTH_SHORT).show(); return; }
-        DiscountCode dc = DiscountCodeHelper.findByCode(code);
-        if (dc != null) {
-            activeDiscount = dc;
-            Toast.makeText(this, getString(R.string.discount_applied, dc.getCode(), dc.getPercent()), Toast.LENGTH_SHORT).show();
-            updateSummary(cartAdapter.getItems());
-        } else {
-            Toast.makeText(this, R.string.invalid_discount, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(code)) {
+            Toast.makeText(this, "Podaj kod rabatowy", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        btnApplyDiscount.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
+
+        DiscountCodeRepository discountRepo = new DiscountCodeRepository();
+
+        discountRepo.verifyPersonalizedCode(code, userId, new OnDiscountCodeLoaded() {
+            @Override
+            public void onSuccess(DiscountCode dc) {
+                progressBar.setVisibility(View.GONE);
+                btnApplyDiscount.setEnabled(true);
+
+                if (dc.getProductId() != null) {
+                    boolean hasRequiredProduct = false;
+                    for (CartItem item : cartAdapter.getItems()) {
+                        if (item.getProductId().equals(dc.getProductId())) {
+                            hasRequiredProduct = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasRequiredProduct) {
+                        Toast.makeText(CartActivity.this, "Ten kod działa tylko na wybrany produkt, którego nie masz w koszyku.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
+                activeDiscount = dc;
+                Toast.makeText(CartActivity.this, "Zastosowano rabat: " + dc.getPercent() + "%", Toast.LENGTH_SHORT).show();
+                updateSummary(cartAdapter.getItems());
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                progressBar.setVisibility(View.GONE);
+                btnApplyDiscount.setEnabled(true);
+                Toast.makeText(CartActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void removeItem(CartItem item) {
