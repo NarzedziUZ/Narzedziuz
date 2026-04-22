@@ -153,6 +153,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             progressBar.setVisibility(View.GONE);
+                            org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(CheckoutActivity.this);
                             Intent intent = new Intent(CheckoutActivity.this, OrderSummaryActivity.class);
                             intent.putExtra("orderId", savedOrder.getId());
                             startActivity(intent);

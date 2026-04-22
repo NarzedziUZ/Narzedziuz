@@ -1,5 +1,7 @@
 package org.store.narzedziuz.repositories;
 
+import android.content.Context;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -67,7 +69,7 @@ public class CartRepository {
     }
 
     /** Dodaje lub aktualizuje produkt w koszyku */
-    public void addToCart(String userId, String productId, int quantity, double price, OnComplete callback) {
+    public void addToCart(Context context, String userId, String productId, int quantity, double price, OnComplete callback) {
         db.collection(USERS).document(userId).collection(CART)
                 .whereEqualTo("productId", productId)
                 .get()
@@ -78,14 +80,20 @@ public class CartRepository {
                         long currentQty = existing.getLong("quantity") != null ? existing.getLong("quantity") : 0;
                         existing.getReference()
                                 .update("quantity", currentQty + quantity)
-                                .addOnSuccessListener(v -> callback.onSuccess())
+                                .addOnSuccessListener(v -> {
+                                    callback.onSuccess();
+                                    org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(context.getApplicationContext());
+                                })
                                 .addOnFailureListener(callback::onFailure);
                     } else {
                         // Nowy wpis
                         CartItem newItem = new CartItem(productId, quantity, price);
                         db.collection(USERS).document(userId).collection(CART)
                                 .add(newItem)
-                                .addOnSuccessListener(v -> callback.onSuccess())
+                                .addOnSuccessListener(v -> {
+                                    callback.onSuccess();
+                                    org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(context.getApplicationContext());
+                                })
                                 .addOnFailureListener(callback::onFailure);
                     }
                 })

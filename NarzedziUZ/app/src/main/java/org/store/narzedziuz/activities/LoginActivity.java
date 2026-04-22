@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.store.narzedziuz.R;
+import org.store.narzedziuz.widgets.CartWidgetProvider;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
                     setLoading(false);
+                    CartWidgetProvider.updateWidget(this);
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 })
