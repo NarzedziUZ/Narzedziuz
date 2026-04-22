@@ -5,7 +5,6 @@ public class DiscountCode {
     private int percent;
     private String productId;
     private String userId; // Nowe pole na ID użytkownika
-    private String generatedDate;
 
     public DiscountCode() {
         // Wymagane przez Firebase
@@ -15,12 +14,11 @@ public class DiscountCode {
         this.percent = percent;
     }
 
-    public DiscountCode(String code, int percent, String productId, String userId, String generatedDate) {
+    public DiscountCode(String code, int percent, String productId, String userId) {
         this.code = code;
         this.percent = percent;
         this.productId = productId;
         this.userId = userId;
-        this.generatedDate = generatedDate;
     }
 
     // Gettery i Settery
@@ -35,6 +33,4 @@ public class DiscountCode {
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
-    public String getGeneratedDate() { return generatedDate; }
-    public void setGeneratedDate(String generatedDate) { this.generatedDate = generatedDate; }
 }
