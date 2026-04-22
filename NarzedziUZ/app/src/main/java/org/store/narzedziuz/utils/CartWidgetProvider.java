@@ -1,3 +1,5 @@
+package org.store.narzedziuz.utils;
+
 package org.store.narzedziuz.widgets;
 
 import android.appwidget.AppWidgetManager;
