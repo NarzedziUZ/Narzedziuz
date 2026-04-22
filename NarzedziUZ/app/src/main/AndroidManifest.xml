@@ -69,7 +69,6 @@
             android:name=".activities.AccelerometerActivity"
             android:exported="false" />
 
-
     </application>
 
 </manifest>

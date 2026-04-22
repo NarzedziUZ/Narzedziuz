@@ -129,13 +129,11 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     }
     private void generateAndSaveDiscountCode() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            Toast.makeText(this, "Musisz być zalogowany, aby otrzymać kod!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String userId = currentUser.getUid();
+        if (currentUser == null) return;
 
-        // 1. Pobieramy wszystkie produkty z bazy, aby wylosować jeden z nich
+        String userId = currentUser.getUid();
+        String todayDate = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+
         FirebaseFirestore.getInstance().collection("products")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -147,55 +145,38 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                             return;
                         }
 
-                        // 2. Losujemy jeden produkt z pobranej listy
                         int randomIndex = new Random().nextInt(productsList.size());
                         DocumentSnapshot randomProduct = productsList.get(randomIndex);
                         String randomProductId = randomProduct.getId();
-
-                        // Opcjonalnie: pobieramy nazwę produktu, żeby pokazać ją użytkownikowi
                         String randomProductName = randomProduct.getString("name");
 
-                        // 3. Generujemy kod zniżkowy dla tego konkretnego, wylosowanego produktu
                         String randomCodeString = "SHAKE" + (new Random().nextInt(9000) + 1000);
-                        int discountPercent = 20; // 20% zniżki
 
-                        DiscountCode newDiscountCode = new DiscountCode(randomCodeString, discountPercent, randomProductId, userId);
+                        DiscountCode newDiscountCode = new DiscountCode(randomCodeString, 20, randomProductId, userId, todayDate);
                         DiscountCodeRepository repository = new DiscountCodeRepository();
 
-                        // 4. Zapisujemy kod w Firebase
                         repository.createDiscountCode(newDiscountCode, saveTask -> {
                             if (saveTask.isSuccessful()) {
-                                // Ustawiamy kod na ekranie
                                 DiscountView.setText(randomCodeString);
+                                String productNameToDisplay = randomProductName != null ? randomProductName : "wybrany produkt";
+                                DiscountName.setText(productNameToDisplay);
 
-                                // DODANE: Ustawiamy nazwę produktu na ekranie
-                                if (randomProductName != null) {
-                                    DiscountName.setText(randomProductName);
-                                } else {
-                                    DiscountName.setText("wybrany produkt"); // zabezpieczenie gdyby pole name w Firebase było puste
-                                }
-                                savePromotionToMemory(randomCodeString, randomProductName,userId);
                                 layoutBefore.setVisibility(View.GONE);
                                 layoutAfter.setVisibility(View.VISIBLE);
 
-                                // DODANE: Logika przycisku "Odbierz" (Kopiowanie do schowka)
                                 Button btnClaim = findViewById(R.id.btnClaim);
                                 btnClaim.setOnClickListener(v -> {
                                     android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                                     android.content.ClipData clip = android.content.ClipData.newPlainText("Kod rabatowy", randomCodeString);
                                     if (clipboard != null) {
                                         clipboard.setPrimaryClip(clip);
-                                        Toast.makeText(AccelerometerActivity.this, "Kod został skopiowany do schowka!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AccelerometerActivity.this, "Kod skopiowany do schowka!", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-
                             } else {
                                 Toast.makeText(this, "Błąd podczas zapisywania kodu.", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-                    } else {
-                        Toast.makeText(this, "Błąd pobierania produktów z bazy.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -234,44 +215,63 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         editor.apply();
     }
 
-    // Sprawdza czy użytkownik dzisiaj już wylosował promocję
     private void checkExistingPromotion() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) return; // Jak nie ma usera to zignoruj sprawdzanie
+        if (currentUser == null) return;
 
-        String currentUserId = currentUser.getUid();
+        String userId = currentUser.getUid();
+        String todayDate = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
 
-        SharedPreferences prefs = getSharedPreferences("ShakePromotionPrefs", MODE_PRIVATE);
+        // Pokazujemy ładowanie zanim ekran potrząsania się pojawi (opcjonalnie)
+        layoutBefore.setVisibility(View.GONE);
+        layoutAfter.setVisibility(View.GONE);
 
-        String savedDate = prefs.getString("promo_date", "");
-        String savedUserId = prefs.getString("promo_user_id", "");
-        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        // PYTAMY FIREBASE PRZY WEJŚCIU NA STRONĘ:
+        FirebaseFirestore.getInstance().collection("discount_codes")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
 
-        // ZMIENIONE: Sprawdzamy czy data jest dzisiejsza ORAZ czy to ten sam użytkownik
-        if (savedDate.equals(todayDate) && savedUserId.equals(currentUserId)) {
-            String savedCode = prefs.getString("promo_code", "");
-            String savedProduct = prefs.getString("promo_product", "");
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                        DiscountCode existingCode = document.toObject(DiscountCode.class);
 
-            DiscountView.setText(savedCode);
-            DiscountName.setText(savedProduct);
+                        if (existingCode != null) {
+                            if (todayDate.equals(existingCode.getGeneratedDate())) {
+                                // 1. Kod jest z dzisiaj! Pokazujemy go natychmiast, z pominięciem potrząsania
+                                DiscountView.setText(existingCode.getCode());
 
-            layoutBefore.setVisibility(View.GONE);
-            layoutAfter.setVisibility(View.VISIBLE);
+                                // Opcjonalnie nazwa produktu (wymagałoby zapytania do bazy products, więc ułatwmy:)
+                                DiscountName.setText("Twój produkt");
 
-            if (sensorManager != null) {
-                sensorManager.unregisterListener(this);
-            }
+                                layoutAfter.setVisibility(View.VISIBLE);
 
-            Button btnClaim = findViewById(R.id.btnClaim);
-            btnClaim.setOnClickListener(v -> {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData.newPlainText("Kod rabatowy", savedCode);
-                if (clipboard != null) {
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(AccelerometerActivity.this, "Kod został skopiowany do schowka!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+                                if (sensorManager != null) {
+                                    sensorManager.unregisterListener(this);
+                                }
+
+                                Button btnClaim = findViewById(R.id.btnClaim);
+                                btnClaim.setOnClickListener(v -> {
+                                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    android.content.ClipData clip = android.content.ClipData.newPlainText("Kod rabatowy", existingCode.getCode());
+                                    if (clipboard != null) {
+                                        clipboard.setPrimaryClip(clip);
+                                        Toast.makeText(AccelerometerActivity.this, "Kod skopiowany do schowka!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return; // Kończymy - nie pozwalamy potrząsać
+                            } else {
+                                // 2. Kod jest stary! Usuwamy go z bazy Firebase
+                                document.getReference().delete();
+                                // Po usunięciu wyświetlamy ekran potrząsania
+                                layoutBefore.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    } else {
+                        // 3. Brak kodów w bazie Firebase - użytkownik jest "czysty", może potrząsać
+                        layoutBefore.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     @Override
