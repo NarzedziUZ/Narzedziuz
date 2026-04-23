@@ -23,7 +23,6 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"
@@ -66,6 +65,11 @@
             android:name=".activities.WishlistActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.AccelerometerActivity"
+            android:exported="false" />
+
+
         <receiver
             android:name=".widgets.CartWidgetProvider"
             android:exported="true">
@@ -79,6 +83,5 @@
         </receiver>
 
     </application>
-
 
 </manifest>

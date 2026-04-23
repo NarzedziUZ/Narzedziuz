@@ -102,7 +102,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_wishlist) {
             startActivity(new Intent(this, WishlistActivity.class));
             return true;
-        } else if (id == R.id.action_logout) {
+        } else if (id == R.id.action_discount_draw) {
+            startActivity(new Intent(this, AccelerometerActivity.class));
+            return true;
+        }else if (id == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
