@@ -67,4 +67,21 @@ public class AuthTest {
 
         onView(withId(R.id.et_confirm_password)).check(matches(hasErrorText("Hasła się nie zgadzają")));
     }
+
+    @Test
+    // Poprawne logowanie - czy po zalogowaniu przechodzi na ekran główny
+    public void login_successful_navigatesToMain() {
+        onView(withId(R.id.et_email)).perform(typeText("testtest@test.pl"), closeSoftKeyboard());
+        onView(withId(R.id.et_password)).perform(typeText("Test1234!"), closeSoftKeyboard());
+
+        onView(withId(R.id.btn_login)).perform(click());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        onView(withId(R.id.et_search)).check(matches(isDisplayed()));
+    }
 }
