@@ -30,6 +30,9 @@
     <string name="add_to_wishlist">Dodaj do listy życzeń</string>
     <string name="in_wishlist">Na liście życzeń ✓</string>
     <string name="added_to_cart">Dodano do koszyka!</string>
+    <string name="find_in_stores">Znajdź sklepy na mapie</string>
+    <string name="stores_query_pattern">sklep narzędziowy</string>
+    <string name="no_map_app_found">Brak aplikacji map na urządzeniu</string>
     <string name="add_review_btn">Dodaj opinię</string>
     <string name="add_review">Dodaj opinię</string>
     <string name="edit_review">Edytuj opinię</string>
