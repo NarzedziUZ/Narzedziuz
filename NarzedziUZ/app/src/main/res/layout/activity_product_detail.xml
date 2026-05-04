@@ -38,6 +38,14 @@
                     <com.google.android.material.button.MaterialButton android:id="@+id/btn_add_to_cart" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="@string/add_to_cart" android:layout_marginEnd="8dp"/>
                     <com.google.android.material.button.MaterialButton android:id="@+id/btn_wishlist" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="@string/add_to_wishlist"/>
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_find_in_stores"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/find_in_stores" />
             </LinearLayout>
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:layout_marginTop="8dp" android:background="@color/surface">

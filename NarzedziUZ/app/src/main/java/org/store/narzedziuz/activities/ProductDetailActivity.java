@@ -1,6 +1,8 @@
 package org.store.narzedziuz.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +42,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView imgProduct;
     private TextView tvName, tvManufacturer, tvPrice, tvStock, tvDescription, tvAvgRating, tvReviewCount;
-    private Button btnAddToCart, btnWishlist, btnAddReview;
+    private Button btnAddToCart, btnWishlist, btnAddReview, btnFindInStores;
     private RatingBar ratingBarAvg;
     private RecyclerView recyclerReviews;
     private ProgressBar progressBar;
@@ -73,6 +75,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddToCart    = findViewById(R.id.btn_add_to_cart);
         btnWishlist     = findViewById(R.id.btn_wishlist);
         btnAddReview    = findViewById(R.id.btn_add_review);
+        btnFindInStores = findViewById(R.id.btn_find_in_stores);
         recyclerReviews = findViewById(R.id.recycler_reviews);
         progressBar     = findViewById(R.id.progress_bar);
 
@@ -142,6 +145,26 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddToCart.setOnClickListener(v -> addToCart());
         btnWishlist.setOnClickListener(v -> toggleWishlist());
         btnAddReview.setOnClickListener(v -> showReviewDialog(null));
+        btnFindInStores.setOnClickListener(v -> openStoresInGoogleMaps());
+    }
+
+    private void openStoresInGoogleMaps() {
+        String query = getString(R.string.stores_query_pattern, product.getName());
+        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(query));
+
+        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, uri);
+        mapsIntent.setPackage("com.google.android.apps.maps");
+
+        try {
+            startActivity(mapsIntent);
+        } catch (ActivityNotFoundException e) {
+            Intent fallbackIntent = new Intent(Intent.ACTION_VIEW, uri);
+            if (fallbackIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(fallbackIntent);
+            } else {
+                Toast.makeText(this, R.string.no_map_app_found, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void addToCart() {
