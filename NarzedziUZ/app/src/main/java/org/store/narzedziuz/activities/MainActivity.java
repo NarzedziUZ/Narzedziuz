@@ -1,6 +1,9 @@
 package org.store.narzedziuz.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,13 +18,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.store.narzedziuz.R;
 import org.store.narzedziuz.adapters.ProductAdapter;
@@ -30,6 +43,7 @@ import org.store.narzedziuz.callbacks.OnProductsLoaded;
 import org.store.narzedziuz.models.Category;
 import org.store.narzedziuz.models.Product;
 import org.store.narzedziuz.repositories.ProductRepository;
+import org.store.narzedziuz.utils.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -49,10 +63,14 @@ public class MainActivity extends AppCompatActivity {
     private List<Category> categories = new ArrayList<>();
     private String selectedCategoryId = null;
 
+    private static final int PERMISSION_REQUEST_CODE = 112;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestNotificationPermission();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
         setupSortSpinner();
         loadCategories();
         loadProducts();
+
+        View fabScanner = findViewById(R.id.search_layout);
+        if (fabScanner != null) {
+            fabScanner.setOnClickListener(v -> {
+                startBarcodeScanner();
+            });
+        }
     }
 
     @Override
@@ -112,6 +137,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Powiadomienia włączone", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setupSearch() {
@@ -202,5 +245,28 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setProducts(filtered);
         tvEmpty.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void startBarcodeScanner() {
+        GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+                .enableAutoZoom()
+                .build();
+
+        GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(this, options);
+
+        scanner.startScan()
+                .addOnSuccessListener(barcode -> {
+                    String scannedCode = barcode.getRawValue();
+                    if (scannedCode != null) {
+                        etSearch.setText(scannedCode);
+                        etSearch.setSelection(scannedCode.length());
+
+                        Toast.makeText(this, "Zeskanowano: " + scannedCode, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Błąd skanowania: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }
