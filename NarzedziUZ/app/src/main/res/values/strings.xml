@@ -99,5 +99,6 @@
     <string name="shakeuz_no_accelerometer">Brak akcelerometru w urządzeniu</string>
     <string name="shakeuz_shake_detected">Wykryto potrząśnięcie</string>
     <string name="shakeuz_promotion_won">Twoja promocja!!!</string>
+    <string name="skanuj_kod">Skanuj kod</string>
 
 </resources>
