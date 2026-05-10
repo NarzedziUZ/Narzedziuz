@@ -2,7 +2,6 @@ package org.store.narzedziuz.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +33,7 @@ import org.store.narzedziuz.repositories.CartRepository;
 import org.store.narzedziuz.repositories.ProductRepository;
 import org.store.narzedziuz.repositories.ReviewRepository;
 import org.store.narzedziuz.repositories.UserRepository;
+import org.store.narzedziuz.utils.MapsIntentFactory;
 
 import java.util.List;
 import java.util.Locale;
@@ -150,15 +150,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void openStoresInGoogleMaps() {
         String query = getString(R.string.stores_query_pattern, product.getName());
-        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(query));
-
-        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, uri);
-        mapsIntent.setPackage("com.google.android.apps.maps");
+        Intent mapsIntent = MapsIntentFactory.createGoogleMapsIntent(query);
 
         try {
             startActivity(mapsIntent);
         } catch (ActivityNotFoundException e) {
-            Intent fallbackIntent = new Intent(Intent.ACTION_VIEW, uri);
+            Intent fallbackIntent = MapsIntentFactory.createFallbackIntent(query);
             if (fallbackIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(fallbackIntent);
             } else {
