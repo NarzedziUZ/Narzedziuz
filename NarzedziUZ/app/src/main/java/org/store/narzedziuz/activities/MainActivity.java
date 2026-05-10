@@ -30,6 +30,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.store.narzedziuz.R;
 import org.store.narzedziuz.adapters.ProductAdapter;
 import org.store.narzedziuz.callbacks.OnCategoriesLoaded;
@@ -94,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
         setupSortSpinner();
         loadCategories();
         loadProducts();
+
+        View fabScanner = findViewById(R.id.search_layout);
+        if (fabScanner != null) {
+            fabScanner.setOnClickListener(v -> {
+                startBarcodeScanner();
+            });
+        }
     }
 
     @Override
@@ -232,5 +245,28 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setProducts(filtered);
         tvEmpty.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void startBarcodeScanner() {
+        GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+                .enableAutoZoom()
+                .build();
+
+        GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(this, options);
+
+        scanner.startScan()
+                .addOnSuccessListener(barcode -> {
+                    String scannedCode = barcode.getRawValue();
+                    if (scannedCode != null) {
+                        etSearch.setText(scannedCode);
+                        etSearch.setSelection(scannedCode.length());
+
+                        Toast.makeText(this, "Zeskanowano: " + scannedCode, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Błąd skanowania: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }
