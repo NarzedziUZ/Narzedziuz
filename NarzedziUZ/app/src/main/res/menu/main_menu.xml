@@ -11,6 +11,11 @@
     <item android:id="@+id/action_wishlist"
         android:title="@string/action_wishlist"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dark_mode"
+        android:title="Tryb ciemny"
+        android:icon="@android:drawable/ic_menu_day"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout"
         app:showAsAction="never" />
