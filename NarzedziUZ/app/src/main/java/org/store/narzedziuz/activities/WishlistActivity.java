@@ -62,7 +62,7 @@ public class WishlistActivity extends AppCompatActivity {
                 UserRepository.getInstance().removeFromWishlist(userId, product.getId(), new OnComplete() {
                     @Override public void onSuccess() { loadWishlist(); }
                     @Override public void onFailure(Exception e) {
-                        Toast.makeText(WishlistActivity.this, "Błąd usuwania", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WishlistActivity.this, R.string.wishlist_error_remove, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -91,7 +91,7 @@ public class WishlistActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(WishlistActivity.this, "Błąd ładowania listy życzeń", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WishlistActivity.this, R.string.wishlist_error_load, Toast.LENGTH_SHORT).show();
             }
         });
     }

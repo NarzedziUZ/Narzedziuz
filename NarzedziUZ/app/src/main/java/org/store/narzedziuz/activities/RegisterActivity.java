@@ -96,17 +96,17 @@ public class RegisterActivity extends AppCompatActivity {
         String password  = etPassword.getText().toString().trim();
         String confirm   = etConfirmPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(firstName)) { etFirstName.setError("Imię jest wymagane"); return; }
-        if (TextUtils.isEmpty(lastName))  { etLastName.setError("Nazwisko jest wymagane"); return; }
-        if (!EMAIL_PATTERN.matcher(email).matches()) { etEmail.setError("Nieprawidłowy format e-mail"); return; }
+        if (TextUtils.isEmpty(firstName)) { etFirstName.setError(getString(R.string.register_error_empty_first_name)); return; }
+        if (TextUtils.isEmpty(lastName))  { etLastName.setError(getString(R.string.register_error_empty_last_name)); return; }
+        if (!EMAIL_PATTERN.matcher(email).matches()) { etEmail.setError(getString(R.string.register_error_invalid_email)); return; }
         if (!PASSWORD_PATTERN.matcher(password).matches()) {
-            etPassword.setError("Hasło: min. 8 znaków, 1 wielka litera, 1 cyfra, 1 znak specjalny");
+            etPassword.setError(getString(R.string.register_error_invalid_password));
             return;
         }
-        if (!password.equals(confirm)) { etConfirmPassword.setError("Hasła się nie zgadzają"); return; }
+        if (!password.equals(confirm)) { etConfirmPassword.setError(getString(R.string.register_error_passwords_mismatch)); return; }
 
         if (!captchaVerified) {
-            Toast.makeText(this, "Potwierdź, że nie jesteś robotem", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.register_error_captcha_required, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -118,19 +118,19 @@ public class RegisterActivity extends AppCompatActivity {
                     UserRepository.getInstance().saveUser(user, new org.store.narzedziuz.callbacks.OnComplete() {
                         @Override public void onSuccess() {
                             setLoading(false);
-                            Toast.makeText(RegisterActivity.this, "Rejestracja udana!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, R.string.register_success, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             finish();
                         }
                         @Override public void onFailure(Exception e) {
                             setLoading(false);
-                            Toast.makeText(RegisterActivity.this, "Błąd zapisu profilu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, getString(R.string.register_error_profile_save, e.getMessage()), Toast.LENGTH_LONG).show();
                         }
                     });
                 })
                 .addOnFailureListener(e -> {
                     setLoading(false);
-                    Toast.makeText(this, "Błąd rejestracji: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.register_error_failed, e.getMessage()), Toast.LENGTH_LONG).show();
                 });
     }
 

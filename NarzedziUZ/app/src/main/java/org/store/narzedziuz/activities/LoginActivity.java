@@ -50,11 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            etEmail.setError("Podaj adres e-mail");
+            etEmail.setError(getString(R.string.login_error_empty_email));
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Podaj hasło");
+            etPassword.setError(getString(R.string.login_error_empty_password));
             return;
         }
 
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     setLoading(false);
-                    Toast.makeText(this, "Błąd logowania: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.login_error_failed, e.getMessage()), Toast.LENGTH_LONG).show();
                 });
     }
 
