@@ -36,6 +36,13 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.android.material.textfield.TextInputLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.LoadAdError;
+import android.util.Log;
+
 import org.store.narzedziuz.R;
 import org.store.narzedziuz.adapters.ProductAdapter;
 import org.store.narzedziuz.callbacks.OnCategoriesLoaded;
@@ -71,6 +78,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, initializationStatus -> {});
+
+        AdView adView = findViewById(R.id.adView);
+        if (adView != null) {
+            adView.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    Log.e("AdMobDebugger", "Ad failed to load: " + loadAdError.getMessage() + " code: " + loadAdError.getCode());
+                }
+
+                @Override
+                public void onAdLoaded() {
+                    Log.i("AdMobDebugger", "Ad loaded successfully!");
+                }
+            });
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
 
         requestNotificationPermission();
 
