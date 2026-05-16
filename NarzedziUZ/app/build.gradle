@@ -56,7 +56,6 @@ dependencies {
 
     // Glide – ładowanie obrazów
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation 'org.testng:testng:6.9.6'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     // CircleImageView – awatar użytkownika
@@ -67,6 +66,9 @@ dependencies {
 
     // Testy
     testImplementation 'junit:junit:4.13.2'
+    testImplementation('org.testng:testng:6.9.6') {
+        exclude group: 'junit', module: 'junit'
+    }
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.robolectric:robolectric:4.11.1'
