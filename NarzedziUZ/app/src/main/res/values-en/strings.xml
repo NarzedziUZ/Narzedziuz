@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NarzedziUZ</string>
+
+    <!-- Auth -->
+    <string name="login_title">Login</string>
+    <string name="register_title">Registration</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm password</string>
+    <string name="first_name_hint">First name</string>
+    <string name="last_name_hint">Last name</string>
+    <string name="login_btn">Log In</string>
+    <string name="register_btn">Register</string>
+    <string name="go_to_register">Create new account</string>
+    <string name="go_to_login">Already have an account? Log in</string>
+    <string name="login_error_empty_email">Please enter e-mail address</string>
+    <string name="login_error_empty_password">Please enter password</string>
+    <string name="login_error_failed">Login failed: %1$s</string>
+    <string name="register_error_empty_first_name">First name is required</string>
+    <string name="register_error_empty_last_name">Last name is required</string>
+    <string name="register_error_invalid_email">Invalid e-mail format</string>
+    <string name="register_error_invalid_password">Password: min. 8 characters, 1 uppercase letter, 1 number, 1 special character</string>
+    <string name="register_error_passwords_mismatch">Passwords do not match</string>
+    <string name="register_error_captcha_required">Please confirm you are not a robot</string>
+    <string name="register_success">Registration successful!</string>
+    <string name="register_error_profile_save">Profile save error: %1$s</string>
+    <string name="register_error_failed">Registration failed: %1$s</string>
+
+    <!-- Main -->
+    <string name="search_hint">Search products…</string>
+    <string name="all_categories">All categories</string>
+    <string name="no_products">No products found</string>
+    <string name="in_stock">In stock: %d pcs.</string>
+    <string name="in_stock_simple">In stock</string>
+    <string name="out_of_stock">Out of stock</string>
+    <string name="login_required">Please log in</string>
+    <string name="main_notifications_enabled">Notifications enabled</string>
+    <string name="main_error_categories_load">Error loading categories</string>
+    <string name="main_error_products_load">Error loading products</string>
+    <string name="main_scanned_format">Scanned: %1$s</string>
+    <string name="main_error_scan_format">Scanning error: %1$s</string>
+    <string name="sort_default">Default</string>
+    <string name="sort_price_asc">Price ascending</string>
+    <string name="sort_price_desc">Price descending</string>
+    <string name="sort_name_az">Name A-Z</string>
+    <string name="category_all">All categories</string>
+
+    <!-- Product detail -->
+    <string name="manufacturer_label">Manufacturer: %s</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="add_to_wishlist">Add to Wishlist</string>
+    <string name="in_wishlist">In Wishlist ✓</string>
+    <string name="added_to_cart">Added to cart!</string>
+    <string name="find_in_stores">Find stores on map</string>
+    <string name="stores_query_pattern">tool store %s</string>
+    <string name="no_map_app_found">No map application found on device</string>
+    <string name="add_review_btn">Add review</string>
+    <string name="add_review">Add review</string>
+    <string name="edit_review">Edit review</string>
+    <string name="delete_review">Delete review</string>
+    <string name="review_count">%d reviews</string>
+    <string name="no_reviews_yet">No reviews yet</string>
+    <string name="submit">Submit</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="comment_hint">Write a comment…</string>
+    <string name="product_error_load">Error loading product</string>
+    <string name="product_price_format">%.2f USD</string>
+    <string name="product_error_add_to_cart">Error adding to cart</string>
+    <string name="product_error_wishlist">Error updating wishlist</string>
+    <string name="product_avg_rating_default">0.0</string>
+    <string name="product_error_reviews_load">Error loading reviews</string>
+    <string name="product_error_review_select_rating">Please select a rating</string>
+    <string name="product_error_review_save">Error saving review</string>
+    <string name="product_error_review_update">Error updating review</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Cart</string>
+    <string name="cart_empty">Your cart is empty</string>
+    <string name="quantity_label">Quantity: %d</string>
+    <string name="discount_code_hint">Discount code</string>
+    <string name="apply_discount">Apply</string>
+    <string name="discount_applied">Code %s: -%d%%</string>
+    <string name="invalid_discount">Invalid discount code</string>
+    <string name="proceed_checkout">Proceed to Checkout</string>
+    <string name="cart_error_loading">Error loading cart</string>
+    <string name="cart_subtotal_format">Subtotal: %.2f USD</string>
+    <string name="cart_discount_format">Discount -%1$d%%: -%2$.2f USD</string>
+    <string name="cart_total_format">Total: %.2f USD</string>
+    <string name="cart_empty_code_error">Please enter a discount code</string>
+
+    <!-- Checkout -->
+    <string name="checkout_title">Checkout</string>
+    <string name="street_hint">Street</string>
+    <string name="house_hint">House / Apartment number</string>
+    <string name="city_hint">City</string>
+    <string name="zip_hint">ZIP / Postal code</string>
+    <string name="country_hint">Country</string>
+    <string name="payment_method">Payment method</string>
+    <string name="blik_code_hint">BLIK code (6 digits)</string>
+    <string name="card_number_hint">Card number (16 digits)</string>
+    <string name="card_expiry_hint">MM/YY</string>
+    <string name="card_cvc_hint">CVC</string>
+    <string name="place_order">Place Order</string>
+    <string name="checkout_total_format">Total: %.2f USD</string>
+    <string name="checkout_validation_required">Required</string>
+    <string name="checkout_error_select_payment">Please select a payment method</string>
+    <string name="checkout_error_blik_length">Please enter a 6-digit BLIK code</string>
+    <string name="checkout_error_card_length">Card number must be 16 digits</string>
+    <string name="checkout_error_cart_empty">Cart is empty</string>
+    <string name="checkout_error_order_failed">Order placement failed: %1$s</string>
+
+    <!-- Payment methods -->
+    <string name="payment_method_blik">BLIK (Mobile payment)</string>
+    <string name="payment_method_card">Credit card (**** %1$s)</string>
+    <string name="payment_method_transfer">Bank transfer</string>
+    <string name="payment_method_paypal">PayPal (Online)</string>
+
+    <!-- Order summary -->
+    <string name="order_summary_title">Order Summary</string>
+    <string name="thank_you">Thank you for shopping!</string>
+    <string name="order_number">Order #%s</string>
+    <string name="go_to_home">Back to Shop</string>
+    <string name="go_to_profile">My Profile</string>
+    <string name="order_summary_total_format">%.2f USD</string>
+    <string name="order_summary_qty_format">x%1$d</string>
+
+    <!-- Profile -->
+    <string name="profile_title">My Profile</string>
+    <string name="my_orders">My Orders</string>
+    <string name="go_to_wishlist">Wishlist</string>
+    <string name="logout">Log Out</string>
+    <string name="no_orders">No orders</string>
+    <string name="purchases_label">PURCHASES</string>
+    <string name="spent_label">TOTAL SPENT</string>
+    <string name="profile_total_spent_format">%.2f USD</string>
+    <string name="change_language">Change language (PL)</string>
+
+    <!-- Wishlist -->
+    <string name="wishlist_title">Wishlist</string>
+    <string name="wishlist_empty">Your wishlist is empty</string>
+    <string name="wishlist_error_remove">Error removing item</string>
+    <string name="wishlist_error_load">Error loading wishlist</string>
+
+    <!-- Menu -->
+    <string name="action_cart">Cart</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_wishlist">Wishlist</string>
+    <string name="action_logout">Log Out</string>
+    <string name="action_discount_draw">ShakeUZ</string>
+
+    <!-- ShakeUZ / Accelerometer -->
+    <string name="shakeuz_title">ShakeUZ</string>
+    <string name="shakeuz_under_title">Shake to get a promo code</string>
+    <string name="shakeuz_toolbar_title">ShakeUZ</string>
+    <string name="shakeuz_no_accelerometer">No accelerometer available on this device</string>
+    <string name="shakeuz_shake_detected">Shake detected</string>
+    <string name="shakeuz_promotion_won">Your promo code!!!</string>
+    <string name="skanuj_kod">Scan code</string>
+    <string name="shakeuz_need_to_be_logged_to_get_code">You must be logged in to receive a code!</string>
+    <string name="shakeuz_no_product_error">Error: No products in database!</string>
+    <string name="shakeuz_code_was_copied">Promo code copied to clipboard!</string>
+    <string name="shakeuz_error_saving_code">Error saving code.</string>
+    <string name="shakeuz_error_fetching_products">Error fetching products from database.</string>
+    <string name="shakeuz_default_product_name">selected product</string>
+    <string name="shakeuz_clipboard_label">Discount code</string>
+</resources>

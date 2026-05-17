@@ -104,7 +104,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(ProductDetailActivity.this, "Błąd ładowania produktu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, R.string.product_error_load, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -114,7 +114,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) getSupportActionBar().setTitle(product.getName());
         tvName.setText(product.getName());
         tvManufacturer.setText(getString(R.string.manufacturer_label, product.getManufacturer()));
-        tvPrice.setText(String.format(Locale.getDefault(), "%.2f PLN", product.getPrice()));
+        tvPrice.setText(getString(R.string.product_price_format, product.getPrice()));
         tvDescription.setText(product.getDescription());
 
         if (product.isInStock()) {
@@ -179,7 +179,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         Toast.makeText(ProductDetailActivity.this, getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
                     }
                     @Override public void onFailure(Exception e) {
-                        Toast.makeText(ProductDetailActivity.this, "Błąd dodawania do koszyka", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, R.string.product_error_add_to_cart, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -202,7 +202,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 btnWishlist.setText(isInWishlist ? R.string.in_wishlist : R.string.add_to_wishlist);
             }
             @Override public void onFailure(Exception e) {
-                Toast.makeText(ProductDetailActivity.this, "Błąd aktualizacji listy życzeń", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, R.string.product_error_wishlist, Toast.LENGTH_SHORT).show();
             }
         };
         if (isInWishlist) {
@@ -223,7 +223,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     tvReviewCount.setText(getString(R.string.review_count, reviews.size()));
                     ratingBarAvg.setRating((float) avg);
                 } else {
-                    tvAvgRating.setText("0.0");
+                    tvAvgRating.setText(getString(R.string.product_avg_rating_default));
                     tvReviewCount.setText(R.string.no_reviews_yet);
                     ratingBarAvg.setRating(0);
                 }
@@ -241,7 +241,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(ProductDetailActivity.this, "Błąd ładowania recenzji", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailActivity.this, R.string.product_error_reviews_load, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -269,7 +269,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             int rating    = (int) rb.getRating();
             String comment = etCom.getText().toString().trim();
-            if (rating == 0) { Toast.makeText(this, "Wybierz ocenę", Toast.LENGTH_SHORT).show(); return; }
+            if (rating == 0) { Toast.makeText(this, R.string.product_error_review_select_rating, Toast.LENGTH_SHORT).show(); return; }
 
             if (existingReview == null) {
                 UserRepository.getInstance().getUser(user.getUid(), new UserRepository.UserCallback() {
@@ -278,7 +278,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         ReviewRepository.getInstance().addReview(r, new OnComplete() {
                             @Override public void onSuccess() { dialog.dismiss(); loadReviews(); }
                             @Override public void onFailure(Exception e) {
-                                Toast.makeText(ProductDetailActivity.this, "Błąd zapisu recenzji", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductDetailActivity.this, R.string.product_error_review_save, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -288,7 +288,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 ReviewRepository.getInstance().updateReview(productId, existingReview.getId(), rating, comment, new OnComplete() {
                     @Override public void onSuccess() { dialog.dismiss(); loadReviews(); }
                     @Override public void onFailure(Exception e) {
-                        Toast.makeText(ProductDetailActivity.this, "Błąd aktualizacji recenzji", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, R.string.product_error_review_update, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

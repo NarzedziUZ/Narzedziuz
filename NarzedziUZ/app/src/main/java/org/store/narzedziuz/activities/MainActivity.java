@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Powiadomienia włączone", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.main_notifications_enabled, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -208,7 +208,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSortSpinner() {
-        String[] sortOptions = {"Domyślne", "Cena rosnąco", "Cena malejąco", "Nazwa A-Z"};
+        String[] sortOptions = {
+                getString(R.string.sort_default),
+                getString(R.string.sort_price_asc),
+                getString(R.string.sort_price_desc),
+                getString(R.string.sort_name_az)
+        };
         ArrayAdapter<String> sa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortOptions);
         sa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSort.setAdapter(sa);
@@ -224,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(List<Category> loaded) {
                 categories = loaded;
                 List<String> names = new ArrayList<>();
-                names.add("Wszystkie kategorie");
+                names.add(getString(R.string.category_all));
                 for (Category c : loaded) names.add(c.getName());
 
                 ArrayAdapter<String> ca = new ArrayAdapter<>(MainActivity.this,
@@ -242,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(MainActivity.this, "Błąd ładowania kategorii", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_error_categories_load, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -259,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Błąd ładowania produktów", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_error_products_load, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -302,11 +307,11 @@ public class MainActivity extends AppCompatActivity {
                         etSearch.setText(scannedCode);
                         etSearch.setSelection(scannedCode.length());
 
-                        Toast.makeText(this, "Zeskanowano: " + scannedCode, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.main_scanned_format, scannedCode), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Błąd skanowania: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.main_error_scan_format, e.getMessage()), Toast.LENGTH_SHORT).show();
                 });
     }
 }

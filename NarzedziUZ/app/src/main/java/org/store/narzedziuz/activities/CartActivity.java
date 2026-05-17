@@ -120,7 +120,7 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(CartActivity.this, "Błąd ładowania koszyka", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, R.string.cart_error_loading, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -128,7 +128,7 @@ public class CartActivity extends AppCompatActivity {
     void updateSummary(List<CartItem> items) {
         double subtotal = CartCalculator.calculateSubtotal(items);
 
-        tvSubtotal.setText(String.format(Locale.getDefault(), "Suma: %.2f PLN", subtotal));
+        tvSubtotal.setText(getString(R.string.cart_subtotal_format, subtotal));
 
         double total = CartCalculator.calculateTotal(subtotal, activeDiscount);
 
@@ -138,8 +138,7 @@ public class CartActivity extends AppCompatActivity {
             tvDiscount.setVisibility(View.VISIBLE);
             tvDiscountInfo.setVisibility(View.VISIBLE);
 
-            tvDiscount.setText(String.format(Locale.getDefault(),
-                    "Rabat -%d%%: -%.2f PLN",
+            tvDiscount.setText(getString(R.string.cart_discount_format,
                     activeDiscount.getPercent(),
                     discountAmount));
         } else {
@@ -147,14 +146,14 @@ public class CartActivity extends AppCompatActivity {
             tvDiscountInfo.setVisibility(View.GONE);
         }
 
-        tvTotal.setText(String.format(Locale.getDefault(), "Do zapłaty: %.2f PLN", total));
+        tvTotal.setText(getString(R.string.cart_total_format, total));
     }
 
     void applyDiscountCode() {
         String code = etDiscountCode.getText().toString().trim();
 
         if (TextUtils.isEmpty(code)) {
-            Toast.makeText(this, "Podaj kod rabatowy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cart_empty_code_error, Toast.LENGTH_SHORT).show();
             return;
         }
 

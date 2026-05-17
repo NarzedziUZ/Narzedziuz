@@ -8,7 +8,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.os.LocaleListCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvInitials, tvFullName, tvEmail, tvOrderCount, tvTotalSpent;
     private RecyclerView recyclerOrders;
     private OrderAdapter orderAdapter;
-    private Button btnWishlist, btnLogout;
+    private Button btnWishlist, btnLogout, btnChangeLanguage;
     private ProgressBar progressBar;
 
     private String userId;
@@ -58,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerOrders = findViewById(R.id.recycler_orders);
         btnWishlist  = findViewById(R.id.btn_wishlist);
         btnLogout    = findViewById(R.id.btn_logout);
+        btnChangeLanguage = findViewById(R.id.btn_change_language);
         progressBar  = findViewById(R.id.progress_bar);
 
         orderAdapter = new OrderAdapter(this, order -> {
@@ -75,6 +78,24 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
+        });
+
+
+        btnChangeLanguage.setOnClickListener(v -> {
+            LocaleListCompat currentLocales = AppCompatDelegate.getApplicationLocales();
+            String currentLang = "pl"; // domyślny fallback
+
+            if (!currentLocales.isEmpty()) {
+                currentLang = currentLocales.get(0).getLanguage();
+            } else {
+                currentLang = Locale.getDefault().getLanguage();
+            }
+
+            if (currentLang.equals("en")) {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("pl"));
+            } else {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"));
+            }
         });
 
         loadProfile();
@@ -103,7 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
                 orderAdapter.setOrders(orders);
                 tvOrderCount.setText(String.valueOf(orders.size()));
                 double total = orders.stream().mapToDouble(Order::getTotalPrice).sum();
-                tvTotalSpent.setText(String.format(Locale.getDefault(), "%.2f PLN", total));
+                tvTotalSpent.setText(getString(R.string.profile_total_spent_format, total));
             }
             @Override
             public void onFailure(Exception e) {

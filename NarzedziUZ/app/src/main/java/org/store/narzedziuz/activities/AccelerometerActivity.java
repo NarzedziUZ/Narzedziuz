@@ -130,7 +130,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     private void generateAndSaveDiscountCode() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
-            Toast.makeText(this, "Musisz być zalogowany, aby otrzymać kod!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.shakeuz_need_to_be_logged_to_get_code, Toast.LENGTH_SHORT).show();
             return;
         }
         String userId = currentUser.getUid();
@@ -143,7 +143,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                         List<DocumentSnapshot> productsList = task.getResult().getDocuments();
 
                         if (productsList.isEmpty()) {
-                            Toast.makeText(this, "Błąd: Brak produktów w bazie!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.shakeuz_no_product_error, Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -172,7 +172,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                                 if (randomProductName != null) {
                                     DiscountName.setText(randomProductName);
                                 } else {
-                                    DiscountName.setText("wybrany produkt"); // zabezpieczenie gdyby pole name w Firebase było puste
+                                    DiscountName.setText(getString(R.string.shakeuz_default_product_name)); // zabezpieczenie gdyby pole name w Firebase było puste
                                 }
                                 savePromotionToMemory(randomCodeString, randomProductName,userId);
                                 layoutBefore.setVisibility(View.GONE);
@@ -182,20 +182,20 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                                 Button btnClaim = findViewById(R.id.btnClaim);
                                 btnClaim.setOnClickListener(v -> {
                                     android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                    android.content.ClipData clip = android.content.ClipData.newPlainText("Kod rabatowy", randomCodeString);
+                                    android.content.ClipData clip = android.content.ClipData.newPlainText(getString(R.string.shakeuz_clipboard_label), randomCodeString);
                                     if (clipboard != null) {
                                         clipboard.setPrimaryClip(clip);
-                                        Toast.makeText(AccelerometerActivity.this, "Kod został skopiowany do schowka!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AccelerometerActivity.this, R.string.shakeuz_code_was_copied, Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
                             } else {
-                                Toast.makeText(this, "Błąd podczas zapisywania kodu.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, R.string.shakeuz_error_saving_code, Toast.LENGTH_SHORT).show();
                             }
                         });
 
                     } else {
-                        Toast.makeText(this, "Błąd pobierania produktów z bazy.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.shakeuz_error_fetching_products, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
