@@ -14,6 +14,18 @@
     <string name="register_btn">Zarejestruj się</string>
     <string name="go_to_register">Utwórz nowe konto</string>
     <string name="go_to_login">Masz już konto? Zaloguj się</string>
+    <string name="login_error_empty_email">Podaj adres e-mail</string>
+    <string name="login_error_empty_password">Podaj hasło</string>
+    <string name="login_error_failed">Błąd logowania: %1$s</string>
+    <string name="register_error_empty_first_name">Imię jest wymagane</string>
+    <string name="register_error_empty_last_name">Nazwisko jest wymagane</string>
+    <string name="register_error_invalid_email">Nieprawidłowy format e-mail</string>
+    <string name="register_error_invalid_password">Hasło: min. 8 znaków, 1 wielka litera, 1 cyfra, 1 znak specjalny</string>
+    <string name="register_error_passwords_mismatch">Hasła się nie zgadzają</string>
+    <string name="register_error_captcha_required">Potwierdź, że nie jesteś robotem</string>
+    <string name="register_success">Rejestracja udana!</string>
+    <string name="register_error_profile_save">Błąd zapisu profilu: %1$s</string>
+    <string name="register_error_failed">Błąd rejestracji: %1$s</string>
 
     <!-- Main -->
     <string name="search_hint">Szukaj produktów…</string>
@@ -23,6 +35,16 @@
     <string name="in_stock_simple">Na stanie</string>
     <string name="out_of_stock">Brak w magazynie</string>
     <string name="login_required">Zaloguj się</string>
+    <string name="main_notifications_enabled">Powiadomienia włączone</string>
+    <string name="main_error_categories_load">Błąd ładowania kategorii</string>
+    <string name="main_error_products_load">Błąd ładowania produktów</string>
+    <string name="main_scanned_format">Zeskanowano: %1$s</string>
+    <string name="main_error_scan_format">Błąd skanowania: %1$s</string>
+    <string name="sort_default">Domyślne</string>
+    <string name="sort_price_asc">Cena rosnąco</string>
+    <string name="sort_price_desc">Cena malejąco</string>
+    <string name="sort_name_az">Nazwa A-Z</string>
+    <string name="category_all">Wszystkie kategorie</string>
 
     <!-- Product detail -->
     <string name="manufacturer_label">Producent: %s</string>
@@ -30,6 +52,9 @@
     <string name="add_to_wishlist">Dodaj do listy życzeń</string>
     <string name="in_wishlist">Na liście życzeń ✓</string>
     <string name="added_to_cart">Dodano do koszyka!</string>
+    <string name="find_in_stores">Znajdź sklepy na mapie</string>
+    <string name="stores_query_pattern">sklep narzędziowy %s</string>
+    <string name="no_map_app_found">Brak aplikacji map na urządzeniu</string>
     <string name="add_review_btn">Dodaj opinię</string>
     <string name="add_review">Dodaj opinię</string>
     <string name="edit_review">Edytuj opinię</string>
@@ -40,6 +65,15 @@
     <string name="update">Aktualizuj</string>
     <string name="cancel">Anuluj</string>
     <string name="comment_hint">Napisz komentarz…</string>
+    <string name="product_error_load">Błąd ładowania produktu</string>
+    <string name="product_price_format">%.2f PLN</string>
+    <string name="product_error_add_to_cart">Błąd dodawania do koszyka</string>
+    <string name="product_error_wishlist">Błąd aktualizacji listy życzeń</string>
+    <string name="product_avg_rating_default">0.0</string>
+    <string name="product_error_reviews_load">Błąd ładowania recenzji</string>
+    <string name="product_error_review_select_rating">Wybierz ocenę</string>
+    <string name="product_error_review_save">Błąd zapisu recenzji</string>
+    <string name="product_error_review_update">Błąd aktualizacji recenzji</string>
 
     <!-- Cart -->
     <string name="cart_title">Koszyk</string>
@@ -50,6 +84,11 @@
     <string name="discount_applied">Kod %s: -%d%%</string>
     <string name="invalid_discount">Nieprawidłowy kod rabatowy</string>
     <string name="proceed_checkout">Przejdź do kasy</string>
+    <string name="cart_error_loading">Błąd ładowania koszyka</string>
+    <string name="cart_subtotal_format">Suma: %.2f PLN</string>
+    <string name="cart_discount_format">Rabat -%1$d%%: -%2$.2f PLN</string>
+    <string name="cart_total_format">Do zapłaty: %.2f PLN</string>
+    <string name="cart_empty_code_error">Podaj kod rabatowy</string>
 
     <!-- Checkout -->
     <string name="checkout_title">Finalizacja zamówienia</string>
@@ -64,6 +103,19 @@
     <string name="card_expiry_hint">MM/RR</string>
     <string name="card_cvc_hint">CVC</string>
     <string name="place_order">Złóż zamówienie</string>
+    <string name="checkout_total_format">Do zapłaty: %.2f PLN</string>
+    <string name="checkout_validation_required">Wymagane</string>
+    <string name="checkout_error_select_payment">Wybierz metodę płatności</string>
+    <string name="checkout_error_blik_length">Podaj 6-cyfrowy kod BLIK</string>
+    <string name="checkout_error_card_length">Numer karty musi mieć 16 cyfr</string>
+    <string name="checkout_error_cart_empty">Koszyk jest pusty</string>
+    <string name="checkout_error_order_failed">Błąd składania zamówienia: %1$s</string>
+
+    <!-- Payment methods -->
+    <string name="payment_method_blik">BLIK (Płatność mobilna)</string>
+    <string name="payment_method_card">Karta płatnicza (**** %1$s)</string>
+    <string name="payment_method_transfer">Przelew tradycyjny</string>
+    <string name="payment_method_paypal">PayPal (Online)</string>
 
     <!-- Order summary -->
     <string name="order_summary_title">Podsumowanie zamówienia</string>
@@ -71,6 +123,8 @@
     <string name="order_number">Zamówienie #%s</string>
     <string name="go_to_home">Wróć do sklepu</string>
     <string name="go_to_profile">Mój profil</string>
+    <string name="order_summary_total_format">%.2f PLN</string>
+    <string name="order_summary_qty_format">x%1$d</string>
 
     <!-- Profile -->
     <string name="profile_title">Mój profil</string>
@@ -80,10 +134,14 @@
     <string name="no_orders">Brak zamówień</string>
     <string name="purchases_label">ZAKUPY</string>
     <string name="spent_label">WYDANO</string>
+    <string name="profile_total_spent_format">%.2f PLN</string>
+    <string name="change_language">Zmień język (EN)</string>
 
     <!-- Wishlist -->
     <string name="wishlist_title">Lista życzeń</string>
     <string name="wishlist_empty">Twoja lista życzeń jest pusta</string>
+    <string name="wishlist_error_remove">Błąd usuwania</string>
+    <string name="wishlist_error_load">Błąd ładowania listy życzeń</string>
 
     <!-- Menu -->
     <string name="action_cart">Koszyk</string>
@@ -99,5 +157,13 @@
     <string name="shakeuz_no_accelerometer">Brak akcelerometru w urządzeniu</string>
     <string name="shakeuz_shake_detected">Wykryto potrząśnięcie</string>
     <string name="shakeuz_promotion_won">Twoja promocja!!!</string>
+    <string name="skanuj_kod">Skanuj kod</string>
+    <string name="shakeuz_need_to_be_logged_to_get_code">Musisz być zalogowany, aby otrzymać kod!</string>
+    <string name="shakeuz_no_product_error">Błąd: Brak produktów w bazie!</string>
+    <string name="shakeuz_code_was_copied">Kod został skopiowany do schowka!</string>
+    <string name="shakeuz_error_saving_code">Błąd podczas zapisywania kodu.</string>
+    <string name="shakeuz_error_fetching_products">Błąd pobierania produktów z bazy.</string>
+    <string name="shakeuz_default_product_name">wybrany produkt</string>
+    <string name="shakeuz_clipboard_label">Kod rabatowy</string>
 
 </resources>

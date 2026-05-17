@@ -85,7 +85,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
         tvDate.setText(order.getFormattedDate());
         tvAddress.setText(order.getDeliveryAddress());
         tvPayment.setText(order.getPaymentMethod());
-        tvTotal.setText(String.format(Locale.getDefault(), "%.2f PLN", order.getTotalPrice()));
+        tvTotal.setText(getString(R.string.order_summary_total_format, order.getTotalPrice()));
 
         // Adapter inline dla pozycji zamówienia
         recyclerItems.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<OrderItemViewHolder>() {
@@ -102,8 +102,8 @@ public class OrderSummaryActivity extends AppCompatActivity {
             public void onBindViewHolder(OrderItemViewHolder holder, int pos) {
                 OrderItem item = order.getItems().get(pos);
                 holder.tvName.setText(item.getProductName());
-                holder.tvQty.setText("x" + item.getQuantity());
-                holder.tvPrice.setText(String.format(Locale.getDefault(), "%.2f PLN", item.getTotalPrice()));
+                holder.tvQty.setText(getString(R.string.order_summary_qty_format, item.getQuantity()));
+                holder.tvPrice.setText(getString(R.string.order_summary_total_format, item.getTotalPrice()));
             }
         });
     }

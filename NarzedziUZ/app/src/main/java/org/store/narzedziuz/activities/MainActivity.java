@@ -1,6 +1,9 @@
 package org.store.narzedziuz.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,13 +18,30 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+import com.google.android.material.textfield.TextInputLayout;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.LoadAdError;
+import android.util.Log;
 
 import org.store.narzedziuz.R;
 import org.store.narzedziuz.adapters.ProductAdapter;
@@ -30,10 +50,13 @@ import org.store.narzedziuz.callbacks.OnProductsLoaded;
 import org.store.narzedziuz.models.Category;
 import org.store.narzedziuz.models.Product;
 import org.store.narzedziuz.repositories.ProductRepository;
+import org.store.narzedziuz.utils.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,10 +72,33 @@ public class MainActivity extends AppCompatActivity {
     private List<Category> categories = new ArrayList<>();
     private String selectedCategoryId = null;
 
+    private static final int PERMISSION_REQUEST_CODE = 112;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, initializationStatus -> {});
+
+        AdView adView = findViewById(R.id.adView);
+        if (adView != null) {
+            adView.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    Log.e("AdMobDebugger", "Ad failed to load: " + loadAdError.getMessage() + " code: " + loadAdError.getCode());
+                }
+
+                @Override
+                public void onAdLoaded() {
+                    Log.i("AdMobDebugger", "Ad loaded successfully!");
+                }
+            });
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
+        requestNotificationPermission();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
         setupSortSpinner();
         loadCategories();
         loadProducts();
+
+        View fabScanner = findViewById(R.id.search_layout);
+        if (fabScanner != null) {
+            fabScanner.setOnClickListener(v -> {
+                startBarcodeScanner();
+            });
+        }
     }
 
     @Override
@@ -111,7 +164,37 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return true;
         }
+        else if (id == R.id.action_dark_mode) {
+
+            int mode = AppCompatDelegate.getDefaultNightMode();
+
+            if (mode == AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, R.string.main_notifications_enabled, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setupSearch() {
@@ -125,7 +208,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSortSpinner() {
-        String[] sortOptions = {"Domyślne", "Cena rosnąco", "Cena malejąco", "Nazwa A-Z"};
+        String[] sortOptions = {
+                getString(R.string.sort_default),
+                getString(R.string.sort_price_asc),
+                getString(R.string.sort_price_desc),
+                getString(R.string.sort_name_az)
+        };
         ArrayAdapter<String> sa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortOptions);
         sa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSort.setAdapter(sa);
@@ -141,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(List<Category> loaded) {
                 categories = loaded;
                 List<String> names = new ArrayList<>();
-                names.add("Wszystkie kategorie");
+                names.add(getString(R.string.category_all));
                 for (Category c : loaded) names.add(c.getName());
 
                 ArrayAdapter<String> ca = new ArrayAdapter<>(MainActivity.this,
@@ -159,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(MainActivity.this, "Błąd ładowania kategorii", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_error_categories_load, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -176,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Błąd ładowania produktów", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_error_products_load, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -202,5 +290,28 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setProducts(filtered);
         tvEmpty.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void startBarcodeScanner() {
+        GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+                .enableAutoZoom()
+                .build();
+
+        GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(this, options);
+
+        scanner.startScan()
+                .addOnSuccessListener(barcode -> {
+                    String scannedCode = barcode.getRawValue();
+                    if (scannedCode != null) {
+                        etSearch.setText(scannedCode);
+                        etSearch.setSelection(scannedCode.length());
+
+                        Toast.makeText(this, getString(R.string.main_scanned_format, scannedCode), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, getString(R.string.main_error_scan_format, e.getMessage()), Toast.LENGTH_SHORT).show();
+                });
     }
 }

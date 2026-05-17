@@ -4,11 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,59 +15,42 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.store.narzedziuz.R;
 import org.store.narzedziuz.adapters.CartAdapter;
-import org.store.narzedziuz.callbacks.OnCartLoaded;
-import org.store.narzedziuz.callbacks.OnComplete;
+import org.store.narzedziuz.callbacks.*;
 import org.store.narzedziuz.models.CartItem;
 import org.store.narzedziuz.models.DiscountCode;
 import org.store.narzedziuz.repositories.CartRepository;
 import org.store.narzedziuz.repositories.DiscountCodeRepository;
-import org.store.narzedziuz.utils.DiscountCodeHelper;
+import org.store.narzedziuz.utils.CartCalculator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.store.narzedziuz.callbacks.OnDiscountCodeLoaded;
 
 public class CartActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerCart;
-    private CartAdapter cartAdapter;
-    private ProgressBar progressBar;
-    private TextView tvEmpty, tvSubtotal, tvDiscount, tvTotal, tvDiscountInfo;
-    private EditText etDiscountCode;
-    private Button btnApplyDiscount, btnCheckout;
-    private View layoutSummary;
+    RecyclerView recyclerCart;
+    CartAdapter cartAdapter;
+    ProgressBar progressBar;
+    TextView tvEmpty, tvSubtotal, tvDiscount, tvTotal, tvDiscountInfo;
+    EditText etDiscountCode;
+    Button btnApplyDiscount, btnCheckout;
+    View layoutSummary;
 
-    private String userId;
-    private DiscountCode activeDiscount = null;
+    String userId;
+    DiscountCode activeDiscount = null;
+
+    // 👉 wstrzykiwalne zależności
+    CartRepository cartRepository = CartRepository.getInstance();
+    DiscountCodeRepository discountRepository = new DiscountCodeRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.cart_title);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> finish());
+        setupToolbar();
+        initViews();
 
-        userId = FirebaseAuth.getInstance().getCurrentUser() != null
-                ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
-
-        recyclerCart     = findViewById(R.id.recycler_cart);
-        progressBar      = findViewById(R.id.progress_bar);
-        tvEmpty          = findViewById(R.id.tv_empty);
-        tvSubtotal       = findViewById(R.id.tv_subtotal);
-        tvDiscount       = findViewById(R.id.tv_discount);
-        tvTotal          = findViewById(R.id.tv_total);
-        tvDiscountInfo   = findViewById(R.id.tv_discount_info);
-        etDiscountCode   = findViewById(R.id.et_discount_code);
-        btnApplyDiscount = findViewById(R.id.btn_apply_discount);
-        btnCheckout      = findViewById(R.id.btn_checkout);
-        layoutSummary    = findViewById(R.id.layout_summary);
+        userId = getUserId();
 
         cartAdapter = new CartAdapter(this, (item, position) -> removeItem(item));
         recyclerCart.setLayoutManager(new LinearLayoutManager(this));
@@ -81,36 +60,53 @@ public class CartActivity extends AppCompatActivity {
         btnCheckout.setOnClickListener(v -> proceedToCheckout());
 
         loadCart();
-        android.content.SharedPreferences prefs = getSharedPreferences("ShakePromotionPrefs", MODE_PRIVATE);
-        String savedDate = prefs.getString("promo_date", "");
-        String todayDate = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+    }
 
-        if (savedDate.equals(todayDate)) {
-            String savedCode = prefs.getString("promo_code", "");
-            if (!savedCode.isEmpty()) {
-                // Wpisz automatycznie wygrany kod do pola tekstowego
-                etDiscountCode.setText(savedCode);
-                Toast.makeText(this, "Przypominamy o Twojej dzisiejszej wygranej!", Toast.LENGTH_SHORT).show();
-            }
+    protected String getUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null
+                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
+                : null;
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.cart_title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadCart();
+    private void initViews() {
+        recyclerCart = findViewById(R.id.recycler_cart);
+        progressBar = findViewById(R.id.progress_bar);
+        tvEmpty = findViewById(R.id.tv_empty);
+        tvSubtotal = findViewById(R.id.tv_subtotal);
+        tvDiscount = findViewById(R.id.tv_discount);
+        tvTotal = findViewById(R.id.tv_total);
+        tvDiscountInfo = findViewById(R.id.tv_discount_info);
+        etDiscountCode = findViewById(R.id.et_discount_code);
+        btnApplyDiscount = findViewById(R.id.btn_apply_discount);
+        btnCheckout = findViewById(R.id.btn_checkout);
+        layoutSummary = findViewById(R.id.layout_summary);
     }
 
+    void loadCart() {
+        if (userId == null) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            layoutSummary.setVisibility(View.GONE);
+            return;
+        }
 
-
-    private void loadCart() {
-        if (userId == null) { tvEmpty.setVisibility(View.VISIBLE); layoutSummary.setVisibility(View.GONE); return; }
         progressBar.setVisibility(View.VISIBLE);
-        CartRepository.getInstance().getCart(userId, new OnCartLoaded() {
+
+        cartRepository.getCart(userId, new OnCartLoaded() {
             @Override
             public void onSuccess(List<CartItem> items) {
                 progressBar.setVisibility(View.GONE);
                 cartAdapter.setItems(items);
+
                 if (items.isEmpty()) {
                     tvEmpty.setVisibility(View.VISIBLE);
                     layoutSummary.setVisibility(View.GONE);
@@ -119,107 +115,98 @@ public class CartActivity extends AppCompatActivity {
                     layoutSummary.setVisibility(View.VISIBLE);
                     updateSummary(items);
                 }
-                org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(CartActivity.this);
             }
+
             @Override
             public void onFailure(Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(CartActivity.this, "Błąd ładowania koszyka", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, R.string.cart_error_loading, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void updateSummary(List<CartItem> items) {
-        double subtotal = 0;
-        for (CartItem item : items) subtotal += item.getTotalPrice();
+    void updateSummary(List<CartItem> items) {
+        double subtotal = CartCalculator.calculateSubtotal(items);
 
-        tvSubtotal.setText(String.format(Locale.getDefault(), "Suma: %.2f PLN", subtotal));
+        tvSubtotal.setText(getString(R.string.cart_subtotal_format, subtotal));
+
+        double total = CartCalculator.calculateTotal(subtotal, activeDiscount);
 
         if (activeDiscount != null) {
-            double discountAmount = subtotal * activeDiscount.getPercent() / 100.0;
-            double total = subtotal - discountAmount;
+            double discountAmount = CartCalculator.calculateDiscountAmount(subtotal, activeDiscount);
+
             tvDiscount.setVisibility(View.VISIBLE);
             tvDiscountInfo.setVisibility(View.VISIBLE);
-            tvDiscount.setText(String.format(Locale.getDefault(), "Rabat -%d%%: -%.2f PLN", activeDiscount.getPercent(), discountAmount));
-            tvDiscountInfo.setText(getString(R.string.discount_applied, activeDiscount.getCode(), activeDiscount.getPercent()));
-            tvTotal.setText(String.format(Locale.getDefault(), "Do zapłaty: %.2f PLN", total));
+
+            tvDiscount.setText(getString(R.string.cart_discount_format,
+                    activeDiscount.getPercent(),
+                    discountAmount));
         } else {
             tvDiscount.setVisibility(View.GONE);
             tvDiscountInfo.setVisibility(View.GONE);
-            tvTotal.setText(String.format(Locale.getDefault(), "Do zapłaty: %.2f PLN", subtotal));
         }
+
+        tvTotal.setText(getString(R.string.cart_total_format, total));
     }
 
-    private void applyDiscountCode() {
+    void applyDiscountCode() {
         String code = etDiscountCode.getText().toString().trim();
+
         if (TextUtils.isEmpty(code)) {
-            Toast.makeText(this, "Podaj kod rabatowy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cart_empty_code_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        btnApplyDiscount.setEnabled(false);
-        progressBar.setVisibility(View.VISIBLE);
-
-        DiscountCodeRepository discountRepo = new DiscountCodeRepository();
-
-        discountRepo.verifyPersonalizedCode(code, userId, new OnDiscountCodeLoaded() {
+        discountRepository.verifyPersonalizedCode(code, userId, new OnDiscountCodeLoaded() {
             @Override
             public void onSuccess(DiscountCode dc) {
-                progressBar.setVisibility(View.GONE);
-                btnApplyDiscount.setEnabled(true);
 
                 if (dc.getProductId() != null) {
-                    boolean hasRequiredProduct = false;
+                    boolean hasProduct = false;
                     for (CartItem item : cartAdapter.getItems()) {
-                        if (item.getProductId().equals(dc.getProductId())) {
-                            hasRequiredProduct = true;
+                        if (dc.getProductId().equals(item.getProductId())) {
+                            hasProduct = true;
                             break;
                         }
                     }
-
-                    if (!hasRequiredProduct) {
-                        Toast.makeText(CartActivity.this, "Ten kod działa tylko na wybrany produkt, którego nie masz w koszyku.", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                    if (!hasProduct) return;
                 }
 
                 activeDiscount = dc;
-                Toast.makeText(CartActivity.this, "Zastosowano rabat: " + dc.getPercent() + "%", Toast.LENGTH_SHORT).show();
                 updateSummary(cartAdapter.getItems());
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                progressBar.setVisibility(View.GONE);
-                btnApplyDiscount.setEnabled(true);
-                Toast.makeText(CartActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void removeItem(CartItem item) {
+    void removeItem(CartItem item) {
         if (userId == null) return;
-        CartRepository.getInstance().removeFromCart(userId, item.getId(), new OnComplete() {
-            @Override public void onSuccess() { loadCart();
-                org.store.narzedziuz.widgets.CartWidgetProvider.updateWidget(CartActivity.this);}
-            @Override public void onFailure(Exception e) {
-                Toast.makeText(CartActivity.this, "Błąd usuwania", Toast.LENGTH_SHORT).show();
-            }
+
+        cartRepository.removeFromCart(userId, item.getId(), new OnComplete() {
+            @Override public void onSuccess() { loadCart(); }
+            @Override public void onFailure(Exception e) { }
         });
     }
 
-    private void proceedToCheckout() {
+    void proceedToCheckout() {
         List<CartItem> items = cartAdapter.getItems();
-        if (items.isEmpty()) { Toast.makeText(this, "Koszyk jest pusty", Toast.LENGTH_SHORT).show(); return; }
+        if (items.isEmpty()) return;
 
-        double subtotal = 0;
-        for (CartItem item : items) subtotal += item.getTotalPrice();
-        double finalPrice = activeDiscount != null
-                ? subtotal * (100 - activeDiscount.getPercent()) / 100.0
-                : subtotal;
+        double subtotal = CartCalculator.calculateSubtotal(items);
+        double finalPrice = CartCalculator.calculateTotal(subtotal, activeDiscount);
 
         Intent intent = new Intent(this, CheckoutActivity.class);
         intent.putExtra("finalPrice", finalPrice);
         startActivity(intent);
     }
 }
+
+
+
+
+
+
+

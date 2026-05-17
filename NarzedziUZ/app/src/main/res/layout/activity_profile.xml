@@ -33,6 +33,7 @@
             <!-- Przyciski -->
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:background="@color/surface" android:padding="12dp" android:layout_marginTop="8dp">
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_wishlist" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/go_to_wishlist" android:layout_marginEnd="8dp"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_change_language" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/change_language" android:layout_marginEnd="4dp"/>
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_logout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/logout" android:backgroundTint="@color/red"/>
             </LinearLayout>
 

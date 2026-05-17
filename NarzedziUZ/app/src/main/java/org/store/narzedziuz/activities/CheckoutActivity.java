@@ -82,7 +82,7 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPlaceOrder = findViewById(R.id.btn_place_order);
         progressBar   = findViewById(R.id.progress_bar);
 
-        tvTotal.setText(String.format(Locale.getDefault(), "Do zapłaty: %.2f PLN", finalPrice));
+        tvTotal.setText(getString(R.string.checkout_total_format, finalPrice));
 
         rgPayment.setOnCheckedChangeListener((group, checkedId) -> {
             layoutBlik.setVisibility(checkedId == R.id.rb_blik ? View.VISIBLE : View.GONE);
@@ -99,30 +99,33 @@ public class CheckoutActivity extends AppCompatActivity {
         String zip     = etZipCode.getText().toString().trim();
         String country = etCountry.getText().toString().trim();
 
-        if (TextUtils.isEmpty(street))  { etStreet.setError("Wymagane"); return; }
-        if (TextUtils.isEmpty(houseNo)) { etHouseNumber.setError("Wymagane"); return; }
-        if (TextUtils.isEmpty(city))    { etCity.setError("Wymagane"); return; }
-        if (TextUtils.isEmpty(zip))     { etZipCode.setError("Wymagane"); return; }
-        if (TextUtils.isEmpty(country)) { etCountry.setError("Wymagane"); return; }
+        if (TextUtils.isEmpty(street))  { etStreet.setError(getString(R.string.checkout_validation_required)); return; }
+        if (TextUtils.isEmpty(houseNo)) { etHouseNumber.setError(getString(R.string.checkout_validation_required)); return; }
+        if (TextUtils.isEmpty(city))    { etCity.setError(getString(R.string.checkout_validation_required)); return; }
+        if (TextUtils.isEmpty(zip))     { etZipCode.setError(getString(R.string.checkout_validation_required)); return; }
+        if (TextUtils.isEmpty(country)) { etCountry.setError(getString(R.string.checkout_validation_required)); return; }
 
         int checkedId = rgPayment.getCheckedRadioButtonId();
-        if (checkedId == -1) { Toast.makeText(this, "Wybierz metodę płatności", Toast.LENGTH_SHORT).show(); return; }
+        if (checkedId == -1) {
+            Toast.makeText(this, R.string.checkout_error_select_payment, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Walidacja szczegółów płatności
         String paymentMethod;
         if (checkedId == R.id.rb_blik) {
             String blik = etBlikCode.getText().toString().trim();
-            if (blik.length() != 6) { etBlikCode.setError("Podaj 6-cyfrowy kod BLIK"); return; }
-            paymentMethod = "BLIK (Płatność mobilna)";
+            if (blik.length() != 6) { etBlikCode.setError(getString(R.string.checkout_error_blik_length)); return; }
+            paymentMethod = getString(R.string.payment_method_blik);
         } else if (checkedId == R.id.rb_card) {
             String cardNum = etCardNumber.getText().toString().replaceAll("\\s","");
-            if (cardNum.length() != 16) { etCardNumber.setError("Numer karty musi mieć 16 cyfr"); return; }
+            if (cardNum.length() != 16) { etCardNumber.setError(getString(R.string.checkout_error_card_length)); return; }
             String last4 = cardNum.substring(12);
-            paymentMethod = "Karta płatnicza (**** " + last4 + ")";
+            paymentMethod = getString(R.string.payment_method_card, last4);
         } else if (checkedId == R.id.rb_transfer) {
-            paymentMethod = "Przelew tradycyjny";
+            paymentMethod = getString(R.string.payment_method_transfer);
         } else {
-            paymentMethod = "PayPal (Online)";
+            paymentMethod = getString(R.string.payment_method_paypal);
         }
 
         String address = street + " " + houseNo + ", " + zip + " " + city + ", " + country;
@@ -170,13 +173,13 @@ public class CheckoutActivity extends AppCompatActivity {
                 public void onFailure(Exception e) {
                     progressBar.setVisibility(View.GONE);
                     btnPlaceOrder.setEnabled(true);
-                    Toast.makeText(CheckoutActivity.this, "Błąd składania zamówienia: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(CheckoutActivity.this, getString(R.string.checkout_error_order_failed, e.getMessage()), Toast.LENGTH_LONG).show();
                 }
             });
         }, e -> {
             progressBar.setVisibility(View.GONE);
             btnPlaceOrder.setEnabled(true);
-            Toast.makeText(this, "Błąd ładowania koszyka", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cart_error_loading, Toast.LENGTH_SHORT).show();
         });
     }
 
