@@ -79,6 +79,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         recyclerReviews = findViewById(R.id.recycler_reviews);
         progressBar     = findViewById(R.id.progress_bar);
 
+        btnFindInStores.setOnClickListener(v -> openStoresInGoogleMaps());
+
         reviewAdapter = new ReviewAdapter(this);
         recyclerReviews.setLayoutManager(new LinearLayoutManager(this));
         recyclerReviews.setAdapter(reviewAdapter);
@@ -149,7 +151,11 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void openStoresInGoogleMaps() {
-        String query = getString(R.string.stores_query_pattern, product.getName());
+        String baseQuery = getString(R.string.stores_query_pattern);
+        String query = baseQuery;
+        if (product != null && product.getName() != null && !product.getName().isEmpty()) {
+            query = String.format(Locale.getDefault(), "%s %s", baseQuery, product.getName());
+        }
         Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(query));
 
         Intent mapsIntent = new Intent(Intent.ACTION_VIEW, uri);
@@ -159,9 +165,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             startActivity(mapsIntent);
         } catch (ActivityNotFoundException e) {
             Intent fallbackIntent = new Intent(Intent.ACTION_VIEW, uri);
-            if (fallbackIntent.resolveActivity(getPackageManager()) != null) {
+            try {
                 startActivity(fallbackIntent);
-            } else {
+            } catch (ActivityNotFoundException fallbackError) {
                 Toast.makeText(this, R.string.no_map_app_found, Toast.LENGTH_SHORT).show();
             }
         }

@@ -2,7 +2,7 @@ package org.store.narzedziuz;
 
 
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 import org.mockito.Mockito;
 import org.store.narzedziuz.models.CartItem;
 import org.store.narzedziuz.models.DiscountCode;
