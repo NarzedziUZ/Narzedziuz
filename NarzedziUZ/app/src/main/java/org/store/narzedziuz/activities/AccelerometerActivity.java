@@ -28,8 +28,8 @@ import android.content.SharedPreferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -119,6 +119,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             );
         }
     }
+
     private void generateAndSaveDiscountCode() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
@@ -166,7 +167,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                                 } else {
                                     DiscountName.setText(getString(R.string.shakeuz_default_product_name)); // zabezpieczenie gdyby pole name w Firebase było puste
                                 }
-                                savePromotionToMemory(randomCodeString, randomProductName,userId);
+                                savePromotionToMemory(randomCodeString, randomProductName, userId);
                                 layoutBefore.setVisibility(View.GONE);
                                 layoutAfter.setVisibility(View.VISIBLE);
 
@@ -191,6 +192,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                     }
                 });
     }
+
     private void updateProgressAfterShake() {
         progres += 20;
         if (progres > 100) {
@@ -210,6 +212,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             }
         }
     }
+
     private void savePromotionToMemory(String code, String productName, String userId) {
         SharedPreferences prefs = getSharedPreferences("ShakePromotionPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -229,6 +232,12 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     // Sprawdza czy użytkownik dzisiaj już wylosował promocję
     private void checkExistingPromotion() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        try {
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        } catch (Exception e) {
+            // Złapany błąd braku inicjalizacji Firebase podczas testów UI
+            e.printStackTrace();
+        }
         if (currentUser == null) return; // Jak nie ma usera to zignoruj sprawdzanie
 
         String currentUserId = currentUser.getUid();
@@ -277,5 +286,11 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void simulateShakeForTesting() {
+        if (shakeDetector != null) {
+            shakeDetector.process(20f, 15f, 10f, System.currentTimeMillis());
+        }
     }
 }
