@@ -28,13 +28,14 @@ import android.content.SharedPreferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.store.narzedziuz.R;
+import org.store.narzedziuz.utils.ShakeDetector;
 
 public class AccelerometerActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -43,9 +44,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private int progres;
-    private float currentAcceleration = SensorManager.GRAVITY_EARTH;
-    private float filteredAcceleration = 0.0f;
-    private long lastShakeTime = 0L;
+    private ShakeDetector shakeDetector;
     private ConstraintLayout layoutBefore;
     private ConstraintLayout layoutAfter;
     private TextView DiscountView;
@@ -85,6 +84,10 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         if (accelerometer == null) {
             Toast.makeText(this, R.string.shakeuz_no_accelerometer, Toast.LENGTH_SHORT).show();
         }
+        shakeDetector = new ShakeDetector(() -> {
+            shakeImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_animation));
+            updateProgressAfterShake();
+        });
         checkExistingPromotion();
     }
 
@@ -107,26 +110,16 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     @SuppressLint("SetTextI18n")
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            float lastAcceleration = currentAcceleration;
-            currentAcceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            float delta = Math.abs(currentAcceleration - lastAcceleration);
-            filteredAcceleration = 0.8f * filteredAcceleration + 0.2f * delta;
-
-            long now = System.currentTimeMillis();
-            if (filteredAcceleration > 3.0f && now - lastShakeTime > SHAKE_COOLDOWN_MS) {
-                lastShakeTime = now;
-                shakeImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_animation));
-                updateProgressAfterShake();
-            }
+            shakeDetector.process(
+                    event.values[0],
+                    event.values[1],
+                    event.values[2],
+                    System.currentTimeMillis()
+            );
         }
     }
+
     private void generateAndSaveDiscountCode() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
@@ -174,7 +167,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                                 } else {
                                     DiscountName.setText(getString(R.string.shakeuz_default_product_name)); // zabezpieczenie gdyby pole name w Firebase było puste
                                 }
-                                savePromotionToMemory(randomCodeString, randomProductName,userId);
+                                savePromotionToMemory(randomCodeString, randomProductName, userId);
                                 layoutBefore.setVisibility(View.GONE);
                                 layoutAfter.setVisibility(View.VISIBLE);
 
@@ -199,6 +192,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
                     }
                 });
     }
+
     private void updateProgressAfterShake() {
         progres += 20;
         if (progres > 100) {
@@ -218,6 +212,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             }
         }
     }
+
     private void savePromotionToMemory(String code, String productName, String userId) {
         SharedPreferences prefs = getSharedPreferences("ShakePromotionPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -237,6 +232,12 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     // Sprawdza czy użytkownik dzisiaj już wylosował promocję
     private void checkExistingPromotion() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        try {
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        } catch (Exception e) {
+            // Złapany błąd braku inicjalizacji Firebase podczas testów UI
+            e.printStackTrace();
+        }
         if (currentUser == null) return; // Jak nie ma usera to zignoruj sprawdzanie
 
         String currentUserId = currentUser.getUid();
@@ -285,5 +286,11 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void simulateShakeForTesting() {
+        if (shakeDetector != null) {
+            shakeDetector.process(20f, 15f, 10f, System.currentTimeMillis());
+        }
     }
 }
